@@ -5,6 +5,7 @@
  */
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateful;
@@ -20,8 +21,9 @@ import javax.persistence.Query;
 @Stateful
 public class Bean_Usuarios implements Bean_UsuariosLocal {
 
-    public boolean VerificarUsuario(String usu, String contra) {
+    public Usuario VerificarUsuario(String usu, String contra) {
         boolean val = false;
+        Usuario user_login = new Usuario();
         List<String> usuario = new ArrayList<String>();
         List<String> contrasenia = new ArrayList<String>();
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
@@ -32,9 +34,11 @@ public class Bean_Usuarios implements Bean_UsuariosLocal {
             usuario = q.getResultList();
             contrasenia = q2.getResultList();
             if (usu.equals(usuario.get(0)) && contra.equals(contrasenia.get(0))) {
-                val = true;
+
+                user_login.setId(usu);
+                user_login.setClave(contra);
             } else {
-                val = false;
+                user_login = null;
             }
             //ls_mensaje=String.valueOf(lista.size());
         } catch (Exception ex) {
@@ -43,9 +47,7 @@ public class Bean_Usuarios implements Bean_UsuariosLocal {
         }
         em1.close();
         factory.close();
-        return val;
+        return user_login;
     }
-    
-    
 
 }

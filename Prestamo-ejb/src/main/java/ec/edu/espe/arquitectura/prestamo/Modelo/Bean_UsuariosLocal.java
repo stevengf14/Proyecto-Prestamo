@@ -5,6 +5,7 @@
  */
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Local;
@@ -15,5 +16,5 @@ import javax.ejb.Local;
  */
 @Local
 public interface Bean_UsuariosLocal {
-    public boolean VerificarUsuario(String usu, String contra);
+    public Usuario VerificarUsuario(String usu, String contra);
 }

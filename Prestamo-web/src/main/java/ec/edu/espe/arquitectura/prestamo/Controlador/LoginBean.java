@@ -5,12 +5,16 @@
  */
 package ec.edu.espe.arquitectura.prestamo.Controlador;
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Usuario;
 import ec.edu.espe.arquitectura.prestamo.Modelo.Bean_UsuariosLocal;
+import ec.edu.espe.arquitectura.prestamo.util.FacesUtil;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.application.FacesMessage;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -22,12 +26,14 @@ public class LoginBean implements Serializable {
 
     @EJB
     Bean_UsuariosLocal bean_usuarios;
-    
-    private String usuario="";
-    private String contrasenia="";
-    private String mensaje="";
 
-    
+    private String usuario = "";
+    private String contrasenia = "";
+    private String mensaje = "";
+
+    UsuarioBean ub = new UsuarioBean();
+    Usuario us = new Usuario();
+
     public String getUsuario() {
         return usuario;
     }
@@ -53,21 +59,35 @@ public class LoginBean implements Serializable {
     }
 
     public String ingresar() {
-        String retorno="";
+        String retorno = "";
         try {
-         
-            if (bean_usuarios.VerificarUsuario(usuario, contrasenia)) {
+
+            us = bean_usuarios.VerificarUsuario(usuario, contrasenia);
+            if (us != null && us.getClave().equals(contrasenia)) {
                 mensaje = "Usuario Encontrado";
-                retorno="MenuPrincipal";
+                retorno = "Inicio";
             } else {
-                mensaje = "Usuario y/o Contrasenia Incorrectos";
+                us = null;
+                FacesUtil.addMessageError(null, "Los datos ingresados son incorrectos");
             }
 
         } catch (Exception e) {
-
+            FacesUtil.addMessageError(null, "Los datos ingresados son incorrectos");
         }
         return retorno;
     }
-    
-    
+
+    public void logout() {
+        us = null;
+    }
+
+    public void error() {
+        FacesUtil.addMessageError(null, "Los datos ingresados son incorrectos");
+    }
+
+    public void addMessage(String summary, String detail) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, summary, detail);
+        FacesContext.getCurrentInstance().addMessage(null, message);
+    }
+
 }
