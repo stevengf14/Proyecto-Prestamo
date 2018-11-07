@@ -23,6 +23,7 @@
                                 <f:selectItem itemLabel="Quirografario" itemValue="Quirografario" />
                                 <f:selectItem itemLabel="Hipotecario" itemValue="Hipotecario" />
                                 <f:selectItem itemLabel="Vehicular" itemValue="Vehicular" />
+                                <f:selectItem itemLabel="Comercial" itemValue="Comercial" />
                             </p:selectOneMenu>
                             
                             
@@ -31,16 +32,7 @@
                            
                             
                             <p:outputLabel for="plazo" value="Plazo (meses): " />
-                            <p:selectOneMenu id="plazo" value="#{nuevoPrestamoBean.plazo}" style="width:125px">
-                                <f:selectItem itemLabel="3" itemValue="3" />
-                                <f:selectItem itemLabel="6" itemValue="6" />
-                                <f:selectItem itemLabel="9" itemValue="9" />
-                                <f:selectItem itemLabel="12" itemValue="12" />
-                                <f:selectItem itemLabel="24" itemValue="24" />
-                                <f:selectItem itemLabel="36" itemValue="36" />
-                                <f:selectItem itemLabel="48" itemValue="48" />
-                                <f:selectItem itemLabel="60" itemValue="60" />
-                            </p:selectOneMenu>
+                            <p:inputText id="plazo"  required="true" value="#{nuevoPrestamoBean.plazo}" maxlength="3" onkeypress="if((event.which &lt; 48 &amp;&amp; event.which != 44 &amp;&amp; event.which != 46) || event.which &gt; 57) return false;"/>
                             
                         </p:panelGrid>
                         <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.aceptar()}" ajax="false" />

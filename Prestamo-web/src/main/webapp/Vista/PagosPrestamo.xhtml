@@ -7,74 +7,71 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
     <ui:composition template="./../Templates/plantillaPaginas.xhtml">
-        <ui:define name="contenido">
-            <p:panel id="mainPnl" header="Pagos" style="width: 80%; margin: auto;">
-                <p:panel id="buscPnl" header="Busqueda" >
-                     <p:panelGrid columns="4" styleClass="ui-noborder">
-                        <p:outputLabel for="filtroCmb" value="Búsqueda por:" />
-                        <p:selectOneMenu id="filtroCmb" value="" required="true"  valueChangeListener="#" >
-                            <p:ajax update="@form"/>
-                            <f:selectItem itemLabel="Cédula" itemValue="CED" />
-                            <f:selectItem itemLabel="Apellido" itemValue="NOM" />
-                        </p:selectOneMenu>
+        <ui:define name="content">
+            <h:form>
+                <p:panel id="mainPnl" header="Pagos" style="width: 80%; margin: auto;">
+                    <p:panel id="buscPnl" header="Busqueda" >
+                        <p:panelGrid columns="4" styleClass="ui-noborder">
+                            <p:outputLabel for="filtroCmb" value="Búsqueda por:" />
+                            <p:selectOneMenu id="filtroCmb" value="" required="true"  valueChangeListener="#" >
+                                <p:ajax update="@form"/>
+                                <f:selectItem itemLabel="Cédula" itemValue="CED" />
+                                <f:selectItem itemLabel="Apellido" itemValue="NOM" />
+                            </p:selectOneMenu>
 
-                        <p:inputText id="busquedaCliente" value=""   rendered="" style="margin-left: 15px;" />
-                       <p:commandButton id="buscarCmd" value="Buscar" actionListener="#" update="@form" />
-                     </p:panelGrid>
-                     
+                            <p:inputText id="busquedaCliente" value=""   rendered="" style="margin-left: 15px;" />
+                            <p:commandButton id="buscarCmd" value="Buscar" actionListener="#" update="@form" />
+                        </p:panelGrid>
+
+                    </p:panel>
+                    <p:panel id="cuotasPendientes" header="Cuotas Pendientes">
+                        <p:dataTable id="cuotaTable" var="camarote" value="#{cuotasClientes.cuotas}" 
+                                     selectionMode="single" selection="#{cuotasClientes.cuotaSel}" rowKey="#{cuotas.pk}">
+                            <p:ajax event="rowSelect" update="cuotaTable" />
+                            <p:ajax event="rowUnselect" update="cuotaTable" />
+                            <p:column headerText="No Cuota" >
+                                <h:outputText value="" />
+                            </p:column>
+                            <p:column headerText="Estado" >
+                                <h:outputText value="" />
+                            </p:column>
+                            <p:column headerText="Vence" >
+                                <h:outputText value=""  />
+                            </p:column>
+                            <p:column headerText="Capital" >
+                                <h:outputText value=""  />
+                            </p:column>
+                            <p:column headerText="Interés" >
+                                <h:outputText value=""  />
+                            </p:column>
+                            <p:column headerText="Valor Cuota" >
+                                <h:outputText value=""  />
+                            </p:column>
+                            <p:column headerText="Saldo" >
+                                <h:outputText value=""  />
+                            </p:column>
+                        </p:dataTable>
+                    </p:panel>
+                    <p:panel id="recibirPago" header="Recibir Pago:">
+                        <p:panelGrid columns="4" styleClass="ui-noborder" style=" margin: 0 auto;">
+                            <p:outputLabel for="valCuota" value="Valor Cuota:" />
+                            <h:outputText id="valCuota" value=""  />
+                            <p:outputLabel for="valRecibido" value="Valor Recibido:" />
+                            <p:inputText id="valRecibido" required="true"  />
+                            <p:outputLabel for="cargos" value="Cargos:" />
+                            <h:outputText id="cargos" value=""  />
+                            <p:outputLabel for="cambio" value="Cambio:" />
+                            <h:outputText id="cambio" value=""  />
+                            <p:outputLabel for="porCobrar" value="Por Cobrar" />
+                            <h:outputText id="porCobrar" value=""  />
+                            <p:outputLabel for="tipCobro" value="Tipo de Cobro:" />
+                            <h:outputText id="tipCobro" value=""  />
+                            <p:commandButton id="regresar" value="Buscar" actionListener="#"  />
+                            <p:commandButton id="regPago" value="Registrar Pago" actionListener="#"  />
+                        </p:panelGrid>
+                    </p:panel>
                 </p:panel>
-                  <p:panel id="cuotasPendientes" header="Cuotas Pendientes">
-                     <p:dataTable id="cuotaTable" var="camarote" value="#{cuotasClientes.cuotas}" 
-                                 selectionMode="single" selection="#{cuotasClientes.cuotaSel}" rowKey="#{cuotas.pk}">
-                        <p:ajax event="rowSelect" update="cuotaTable" />
-                        <p:ajax event="rowUnselect" update="cuotaTable" />
-                        <p:column headerText="No Cuota" >
-                            <h:outputText value="" />
-                        </p:column>
-                        <p:column headerText="Estado" >
-                            <h:outputText value="" />
-                        </p:column>
-                        <p:column headerText="Vence" >
-                            <h:outputText value=""  />
-                        </p:column>
-                        <p:column headerText="Capital" >
-                            <h:outputText value=""  />
-                        </p:column>
-                        <p:column headerText="Interés" >
-                            <h:outputText value=""  />
-                        </p:column>
-                        <p:column headerText="Valor Cuota" >
-                            <h:outputText value=""  />
-                        </p:column>
-                        <p:column headerText="Saldo" >
-                            <h:outputText value=""  />
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-                 <p:panel id="recibirPago" header="Recibir Pago:">
-                    <p:panelGrid columns="4" styleClass="ui-noborder" style=" margin: 0 auto;">
-                        <p:outputLabel for="valCuota" value="Valor Cuota:" />
-                         <h:outputText id="valCuota" value=""  />
-                         <p:outputLabel for="valRecibido" value="Valor Recibido:" />
-                         <p:inputText id="valRecibido" required="true"  />
-                         <p:outputLabel for="cargos" value="Cargos:" />
-                         <h:outputText id="cargos" value=""  />
-                         <p:outputLabel for="cambio" value="Cambio:" />
-                         <h:outputText id="cambio" value=""  />
-                         <p:outputLabel for="porCobrar" value="Por Cobrar" />
-                         <h:outputText id="porCobrar" value=""  />
-                         <p:outputLabel for="tipCobro" value="Tipo de Cobro:" />
-                         <h:outputText id="tipCobro" value=""  />
-                         <p:commandButton id="regresar" value="Buscar" actionListener="#"  />
-                       <p:commandButton id="regPago" value="Registrar Pago" actionListener="#"  />
-                   </p:panelGrid>
-        
-                       
-                </p:panel>
-                 
-                
-        </p:panel>
-        
+            </h:form>
         </ui:define>
     </ui:composition>
 </html>

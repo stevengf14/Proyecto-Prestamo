@@ -5,6 +5,7 @@
  */
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Cliente;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Usuario;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,14 +41,11 @@ public class Bean_Usuarios implements Bean_UsuariosLocal {
             } else {
                 user_login = null;
             }
-            //ls_mensaje=String.valueOf(lista.size());
         } catch (Exception ex) {
-            //ls_mensaje = ex.getMessage();
-            val = false;
+            user_login = null;
         }
         em1.close();
         factory.close();
         return user_login;
     }
-
 }

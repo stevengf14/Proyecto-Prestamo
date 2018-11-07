@@ -13,19 +13,19 @@
                 <p:panel id="Datos" header="Datos del Préstamo">
                     <p:panelGrid  class="ui-noborder" columns="4" >
                         <p:outputLabel for="cedula" value="Cédula: " />
-                        <p:outputLabel id='cedula' value="xxxxx: " />
+                        <p:outputLabel id='cedula' value="#{nuevoPrestamoBean.cli.cedula} " />
                         
                         <p:outputLabel for="Seguro_Desgravamen" value="Seguro Desgravamen: " />
                         <p:outputLabel id='Seguro_Desgravamen' value="0.5%" />
                         
                         <p:outputLabel for="nombre" value="Nombre: " />
-                        <p:outputLabel id='nombre' value="Steven Guamán " />
+                        <p:outputLabel id='nombre' value="#{nuevoPrestamoBean.cli.nombre}" />
                         
                         <p:outputLabel for="gasto" value="Gastos Administrativos: " />
                         <p:outputLabel id='gasto' value="0.5%" />
                         
                         <p:outputLabel for="tipo" value="Tipo de Préstamo: " />
-                        <p:outputLabel id='tipo' value="Préstamo Vehicular" />
+                        <p:outputLabel id='tipo' value="#{nuevoPrestamoBean.tipo}" />
                         
                         <p:outputLabel for="solca" value="Contribución Atención Integral al Cáncer: " />
                         <p:outputLabel id='solca' value="0.5%" />
