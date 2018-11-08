@@ -8,6 +8,9 @@ package ec.edu.espe.arquitectura.prestamo.Modelo;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Cliente;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Usuario;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -181,5 +184,36 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         em1.close();
         factory.close();
         return mensaje;
+    }
+    
+    public double Convertir(double num) {
+        int places = 2;
+        BigDecimal bd = new BigDecimal(num);
+        bd = bd.setScale(places, RoundingMode.HALF_UP);
+        return bd.doubleValue();
+
+    }
+
+    public List<String> GenerarFechas(int plazoPrestamo) {
+        List<String> lista = new ArrayList<String>();
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        LocalDate ahora = LocalDate.now();
+        int mes = ahora.getMonthValue();
+        int anio = ahora.getYear();
+        int dia = ahora.getDayOfMonth();
+        if (dia == 29 || dia == 30 || dia == 31) {
+            dia = 1;
+        }
+        lista.add(anio + "-" + mes + "-" + dia);
+        for (int i = 0; i < plazoPrestamo; i++) {
+            mes = mes + 1;
+            if (mes == 13) {
+                mes = 1;
+                anio = anio + 1;
+            }
+            lista.add(anio + "-" + mes + "-" + dia);
+        }
+
+        return lista;
     }
 }

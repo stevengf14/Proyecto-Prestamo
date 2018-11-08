@@ -76,7 +76,7 @@ public class LoginBean implements Serializable {
         }
         return retorno;
     }
-
+    
     public void logout() {
         us = null;
     }

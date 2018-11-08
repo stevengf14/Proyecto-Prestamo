@@ -7,10 +7,9 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -18,18 +17,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Samsung-PC
+ * @author Steven
  */
 @Entity
 @Table(name = "AMORTIZACION")
@@ -41,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Amortizacion.findByInteres", query = "SELECT a FROM Amortizacion a WHERE a.interes = :interes")
     , @NamedQuery(name = "Amortizacion.findByValorCuota", query = "SELECT a FROM Amortizacion a WHERE a.valorCuota = :valorCuota")
     , @NamedQuery(name = "Amortizacion.findByFechaAmortizacion", query = "SELECT a FROM Amortizacion a WHERE a.fechaAmortizacion = :fechaAmortizacion")
-    , @NamedQuery(name = "Amortizacion.findByEstado", query = "SELECT a FROM Amortizacion a WHERE a.estado = :estado")})
+    , @NamedQuery(name = "Amortizacion.findByEstado", query = "SELECT a FROM Amortizacion a WHERE a.estado = :estado")
+    , @NamedQuery(name = "Amortizacion.findByNumero", query = "SELECT a FROM Amortizacion a WHERE a.numero = :numero")
+    , @NamedQuery(name = "Amortizacion.findBySaldo", query = "SELECT a FROM Amortizacion a WHERE a.saldo = :saldo")})
 public class Amortizacion implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -73,8 +72,10 @@ public class Amortizacion implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "ESTADO")
     private String estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "amoId")
-    private Collection<PagoPrestamo> pagoPrestamoCollection;
+    @Column(name = "NUMERO")
+    private BigInteger numero;
+    @Column(name = "SALDO")
+    private BigDecimal saldo;
     @JoinColumn(name = "PRE_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Prestamo preId;
@@ -143,13 +144,20 @@ public class Amortizacion implements Serializable {
         this.estado = estado;
     }
 
-    @XmlTransient
-    public Collection<PagoPrestamo> getPagoPrestamoCollection() {
-        return pagoPrestamoCollection;
+    public BigInteger getNumero() {
+        return numero;
     }
 
-    public void setPagoPrestamoCollection(Collection<PagoPrestamo> pagoPrestamoCollection) {
-        this.pagoPrestamoCollection = pagoPrestamoCollection;
+    public void setNumero(BigInteger numero) {
+        this.numero = numero;
+    }
+
+    public BigDecimal getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(BigDecimal saldo) {
+        this.saldo = saldo;
     }
 
     public Prestamo getPreId() {

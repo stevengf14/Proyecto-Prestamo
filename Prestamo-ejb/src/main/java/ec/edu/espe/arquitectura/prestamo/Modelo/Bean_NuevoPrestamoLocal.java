@@ -6,6 +6,7 @@
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
 import ec.edu.espe.arquitectura.prestamo.Entidades.Cliente;
+import java.util.List;
 import javax.ejb.Local;
 
 /**
@@ -21,4 +22,6 @@ public interface Bean_NuevoPrestamoLocal {
     public String mensajeMonto(String TipoPrestamo);
     public boolean validarPlazo(String TipoPrestamo, int plazo);
     public String mensajePlazo(String TipoPrestamo);
+    public double Convertir(double num);
+    public List<String> GenerarFechas(int plazoPrestamo);
 }

@@ -5,32 +5,26 @@
  */
 package ec.edu.espe.arquitectura.prestamo.Controlador;
 
+import java.awt.event.ActionEvent;
+import javax.inject.Named;
+import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
-import javax.inject.Named;
-import javax.faces.view.ViewScoped;
 
 /**
  *
  * @author Steven
  */
 @ManagedBean
-@ViewScoped
-public class MenuBean implements Serializable{
+@SessionScoped
+public class DetalleBean implements Serializable {
 
-    /**
-     * Creates a new instance of MenuBean
-     */
-    public MenuBean() {
-        
+    
+    public DetalleBean() {
     }
-    public String NuevoPrestamo()
+    
+    public String aceptar(ActionEvent e)
     {
         return "Inicio";
     }
-    public String Salir()
-    {
-        return "Usuario_Login";
-    }
-    
 }

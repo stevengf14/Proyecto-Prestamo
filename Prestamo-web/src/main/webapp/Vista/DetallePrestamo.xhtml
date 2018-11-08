@@ -14,63 +14,88 @@
                     <p:panelGrid  class="ui-noborder" columns="4" >
                         <p:outputLabel for="cedula" value="Cédula: " />
                         <p:outputLabel id='cedula' value="#{nuevoPrestamoBean.cli.cedula} " />
-                        
+
                         <p:outputLabel for="Seguro_Desgravamen" value="Seguro Desgravamen: " />
                         <p:outputLabel id='Seguro_Desgravamen' value="0.5%" />
-                        
+
                         <p:outputLabel for="nombre" value="Nombre: " />
                         <p:outputLabel id='nombre' value="#{nuevoPrestamoBean.cli.nombre}" />
-                        
+
                         <p:outputLabel for="gasto" value="Gastos Administrativos: " />
                         <p:outputLabel id='gasto' value="0.5%" />
-                        
+
                         <p:outputLabel for="tipo" value="Tipo de Préstamo: " />
                         <p:outputLabel id='tipo' value="#{nuevoPrestamoBean.tipo}" />
-                        
+
                         <p:outputLabel for="solca" value="Contribución Atención Integral al Cáncer: " />
                         <p:outputLabel id='solca' value="0.5%" />
-                        
-                        <p:outputLabel for="tipo" value="Monto: " />
-                        <p:outputLabel id='tipo' value="#{nuevoPrestamoBean.monto}" />
-                        
-                        <p:outputLabel for="tipo" value="Tasa de Interés: " />
-                        <p:outputLabel id='tipo' value="2%" />
+
+                        <p:outputLabel for="monto" value="Monto: " />
+                        <p:outputLabel id='monto' value="#{nuevoPrestamoBean.monto}" />
+
+                        <p:outputLabel for="ti" value="Tasa de Interés: " />
+                        <p:outputLabel id='ti' value="2%" />
                     </p:panelGrid>
                 </p:panel>
                 <br></br>
                 <p:panel id="Amortización" header="Tabla de Amortización">
-                    <p:dataTable var="car" value="#{dtBasicView.cars}">
+                    <p:dataTable var="amort" value="#{nuevoPrestamoBean.amortizacion}">
                         <p:column headerText="No. Cuota">
-                            <h:outputText value="#{car.id}" />
+                            <h:outputText value="#{amort.numero}" />
                         </p:column>
 
                         <p:column headerText="Fecha de Pago">
-                            <h:outputText value="#{car.year}" />
+                            <h:outputText value="#{amort.fecha_amortizacion}" />
                         </p:column>
 
                         <p:column headerText="Capital">
-                            <h:outputText value="#{car.brand}" />
+                            <h:outputText value="#{amort.capital}" />
                         </p:column>
 
                         <p:column headerText="Interés">
-                            <h:outputText value="#{car.color}" />
+                            <h:outputText value="#{amort.interes}" />
                         </p:column>
 
                         <p:column headerText="Valor Cuota">
-                            <h:outputText value="#{car.color}" />
+                            <h:outputText value="#{amort.valor_cuota}" />
                         </p:column>
-
+                        <p:column headerText="Saldo">
+                            <h:outputText value="#{amort.saldo}" />
+                        </p:column>
                         <p:column headerText="Estado">
-                            <h:outputText value="#{car.color}" />
+                            <h:outputText value="#{amort.estado}" />
+                        </p:column>
+                    </p:dataTable>
+                    <p:dataTable var="tot" value="#{nuevoPrestamoBean.lista_total}">
+                        <p:column>
+                            <h:outputText value="#{tot.numero}" />
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{tot.fecha_amortizacion}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tot.capital}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tot.interes}" />
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{tot.valor_cuota}" />
+                        </p:column>
+                        <p:column >
+                            <h:outputText value="#{tot.saldo}" />
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{tot.estado}" />
                         </p:column>
                     </p:dataTable>
                 </p:panel>
+                <p:panel id="bot">
+                    <p:button value="Aceptar" outcome="Inicio" />
+                </p:panel>
             </ui:define>
-
             <ui:define name="bottom">
-                bottom
             </ui:define>
-
         </ui:composition>
 
     </body>
