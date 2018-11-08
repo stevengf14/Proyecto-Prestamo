@@ -15,7 +15,7 @@ import ec.edu.espe.arquitectura.prestamo.Modelo.PagoPrestamoFacadeLocal;
 
 
 
-import ec.edu.espe.arquitectura.prestamo.Modelo.PrestamoFacadeLocal;
+
 import ec.edu.espe.arquitectura.prestamo.util.FacesUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;

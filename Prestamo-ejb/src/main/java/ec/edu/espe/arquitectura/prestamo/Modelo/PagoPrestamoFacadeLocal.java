@@ -19,6 +19,7 @@ import javax.ejb.Local;
 public interface PagoPrestamoFacadeLocal {
 
  public Prestamo busquedaPrestamo(String cedula);
+ 
  public double busquedaMonto(String cedula);
  public int busquedaPlazo(String cedula);
  public String busquedaNombre(String cedula);
