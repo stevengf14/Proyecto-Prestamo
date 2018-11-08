@@ -5,12 +5,77 @@ To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html">
     <head>
         <title>Confirmacion Préstamo</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-        <div>TODO write content</div>
+
+        <ui:composition template="./../Templates/plantillaPaginas.xhtml">
+
+            <ui:define name="content">
+                <h:form>
+                    <p:panel id="confirmarPrestamo" header="Confirmación De Préstamo" style="width: 80%; margin: auto;">
+                        <p:panelGrid  class="ui-noborder" columns="4" >
+                            <p:outputLabel for="numPrestamo" value="Nro. Préstamo: " />
+                            <p:outputLabel id='numPrestamo' value=" " />
+
+                            <p:outputLabel for="fechaCreacion" value="Fecha Creación: " />
+                            <p:calendar id='fechaCreacion' value="04/07/1995" />
+
+                            <p:outputLabel for="nombre" value="Cliente: " />
+                            <p:outputLabel id='nombre' value="#{nuevoPrestamoBean.cli.nombre}" />
+
+                            <p:outputLabel for="fechaConsecion" value="Fecha Conseción: " />
+                            <p:calendar id='fechaConsecion' value=" " />
+
+                            <p:outputLabel for="tipoPrestamo" value="Tipo de Préstamo: " />
+                            <p:outputLabel id='tipoPrestamo' value="#{nuevoPrestamoBean.cli.nombre}" />
+
+                            <p:outputLabel for="fechaDesembolso" value="Fecha Desembolso: " />
+                            <p:calendar id='fechaDesembolso' value=" " />
+
+                            <p:outputLabel for="montoPrestado" value="Monto Prestado: $" />
+                            <p:outputLabel id='montoPrestado' value="0.5%" />
+
+                            <p:outputLabel/>
+                            <p:outputLabel/>
+
+                            <p:outputLabel for="plazoC" value="Plazo: " />
+                            <p:outputLabel id='plazoC' value="#{nuevoPrestamoBean.tipo}" />
+
+                            <p:outputLabel/>
+                            <p:outputLabel/>
+
+                            <p:outputLabel for="interesC" value="Interés: " />
+                            <p:outputLabel id='interesC' value="0.5%" />
+
+                            <p:outputLabel/>
+                            <p:outputLabel/>
+
+                            <p:outputLabel for="valorComision" value="Valor Comisión: $" />
+                            <p:outputLabel id='valorComision' value="#{nuevoPrestamoBean.monto}" />
+
+                            <p:outputLabel/>
+                            <p:outputLabel/>
+
+                            <p:outputLabel for="montoFinal" value="Monto Final: $" />
+                            <p:outputLabel id='montoFinal' value=" " />
+
+                            <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales: $" />
+                            <p:outputLabel id='cuotasMensuales' value=" " />
+                        </p:panelGrid>
+                    </p:panel>
+                    <p:panel id="bot">
+                        <p:button  value="Confirmar Prestamo" outcome="Inicio" />
+                    </p:panel>
+                </h:form>
+            </ui:define>
+            <ui:define name="bottom">
+            </ui:define>
+        </ui:composition>
     </body>
 </html>

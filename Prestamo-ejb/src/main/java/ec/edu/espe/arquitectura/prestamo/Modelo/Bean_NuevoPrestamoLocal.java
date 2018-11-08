@@ -24,4 +24,5 @@ public interface Bean_NuevoPrestamoLocal {
     public String mensajePlazo(String TipoPrestamo);
     public double Convertir(double num);
     public List<String> GenerarFechas(int plazoPrestamo);
+    public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String cuoMen);
 }

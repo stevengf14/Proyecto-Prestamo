@@ -14,9 +14,13 @@ import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -35,6 +39,15 @@ public class NuevoPrestamoBean implements Serializable {
     private int plazo;
     private ArrayList<Tabla_Amortizacion> amortizacion = new ArrayList<Tabla_Amortizacion>();
     private ArrayList<Total> lista_total = new ArrayList<Total>();
+    private boolean confirmacion;
+    private boolean detalle;
+    private String fechaCreacion;
+    private String fechaConcesion;
+    private String fechaDesembolso;
+    private double montoFinal;
+    private double coutas;
+    private double comision;
+    private int numPrestamo;
     @EJB
     Bean_NuevoPrestamoLocal bean_nuevoPrestamo;
 
@@ -49,6 +62,8 @@ public class NuevoPrestamoBean implements Serializable {
     }
 
     public NuevoPrestamoBean() {
+        this.confirmacion = true;
+        this.detalle = true;
     }
 
     public Cliente getCli() {
@@ -99,6 +114,80 @@ public class NuevoPrestamoBean implements Serializable {
         this.amortizacion = amortizacion;
     }
 
+    public boolean isConfirmacion() {
+        return confirmacion;
+    }
+
+    public void setConfirmacion(boolean confirmacion) {
+        this.confirmacion = confirmacion;
+    }
+
+    public boolean isDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(boolean detalle) {
+        this.detalle = detalle;
+    }
+
+    public String getFechaCreacion() {
+        return fechaCreacion;
+    }
+
+    public void setFechaCreacion(String fechaCreacion) {
+        this.fechaCreacion = fechaCreacion;
+    }
+
+    public String getFechaConcesion() {
+        return fechaConcesion;
+    }
+
+    public void setFechaConcesion(String fechaConcesion) {
+        this.fechaConcesion = fechaConcesion;
+    }
+
+    public String getFechaDesembolso() {
+        return fechaDesembolso;
+    }
+
+    public void setFechaDesembolso(String fechaDesembolso) {
+        this.fechaDesembolso = fechaDesembolso;
+    }
+
+    public double getMontoFinal() {
+        return montoFinal;
+    }
+
+    public void setMontoFinal(double montoFinal) {
+        this.montoFinal = montoFinal;
+    }
+
+    public double getCoutas() {
+        return coutas;
+    }
+
+    public void setCoutas(double coutas) {
+        this.coutas = coutas;
+    }
+
+    public double getComision() {
+        return comision;
+    }
+
+    public void setComision(double comision) {
+        this.comision = comision;
+    }
+
+    public int getNumPrestamo() {
+        return numPrestamo;
+    }
+
+    public void setNumPrestamo(int numPrestamo) {
+        this.numPrestamo = numPrestamo;
+    }
+    
+    
+
     public String aceptar() {
         cli = bean_nuevoPrestamo.verificarCliente(cedula);
         amortizacion.clear();
@@ -107,6 +196,7 @@ public class NuevoPrestamoBean implements Serializable {
                 if (bean_nuevoPrestamo.validarMonto(tipo, monto)) {
                     if (bean_nuevoPrestamo.validarPlazo(tipo, plazo)) {
                         CargarTabla();
+                        calculosConfirmacion();
                         return "DetallePrestamo";
                     } else {
                         FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajePlazo(tipo));
@@ -155,8 +245,39 @@ public class NuevoPrestamoBean implements Serializable {
         Total tot = new Total("Total", bean_nuevoPrestamo.Convertir(monto), bean_nuevoPrestamo.Convertir(monto * interes_anual / 100), bean_nuevoPrestamo.Convertir(valor_cuota * plazo), bean_nuevoPrestamo.Convertir(saldo), "", "");
         lista_total.add(tot);
     }
-    public String aceptarDetalle()
-    {
-        return "Inicio";
+
+    public String aceptarDetalle() {
+        return "ConfirmacionPrestamo";
+    }
+
+    public void mostrarConfirmacion() {
+        this.confirmacion = true;
+        this.detalle = false;
+
+    }
+
+    public void calculosConfirmacion() {
+        Date fecha = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        this.fechaCreacion = format.format(fecha);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+        calendar.add(Calendar.DAY_OF_YEAR, 3);
+        this.fechaConcesion = format.format(calendar.getTime());
+
+        Integer sizefechas = amortizacion.size() - 1;
+        this.fechaDesembolso = amortizacion.get(sizefechas).getFecha_amortizacion();
+
+        double com = (monto * 0.15);
+        this.comision = com;
+        this.montoFinal = this.monto - com;
+        this.coutas = amortizacion.get(sizefechas).getValor_cuota();
+
+        this.numPrestamo = bean_nuevoPrestamo.EncontrarIdPrestamo(this.tipo);
+    }
+    
+    public void guardarPrestamo(){
+       bean_nuevoPrestamo.insertarPrestamo(this.numPrestamo+"", "1", this.tipo, this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto+"", this.plazo+"", "0.5", this.comision+"", this.montoFinal+"", this.coutas+"");
     }
 }

@@ -104,7 +104,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
             Query q2 = em1.createNativeQuery("SELECT MONTO_MAXIMO FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             montoMin = q.getResultList();
             montoMax = q2.getResultList();
-            
+
             if (monto >= montoMin.get(0).doubleValue() && monto <= montoMax.get(0).doubleValue()) {
                 val = true;
             } else {
@@ -138,9 +138,8 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         factory.close();
         return mensaje;
     }
-    
-    public boolean validarPlazo(String TipoPrestamo, int plazo)
-    {
+
+    public boolean validarPlazo(String TipoPrestamo, int plazo) {
         int id = EncontrarIdPrestamo(TipoPrestamo);
         boolean val = false;
         List<BigDecimal> plazoMin = new ArrayList<BigDecimal>();
@@ -152,7 +151,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
             Query q2 = em1.createNativeQuery("SELECT PLAZO_MAX FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             plazoMin = q.getResultList();
             plazoMax = q2.getResultList();
-            
+
             if (plazo >= plazoMin.get(0).doubleValue() && plazo <= plazoMax.get(0).doubleValue()) {
                 val = true;
             } else {
@@ -165,6 +164,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         factory.close();
         return val;
     }
+
     public String mensajePlazo(String TipoPrestamo) {
         int id = EncontrarIdPrestamo(TipoPrestamo);
         String mensaje = "";
@@ -185,7 +185,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         factory.close();
         return mensaje;
     }
-    
+
     public double Convertir(double num) {
         int places = 2;
         BigDecimal bd = new BigDecimal(num);
@@ -215,5 +215,60 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         }
 
         return lista;
+    }
+
+    public int ExtraerNumPrestamo() {
+        int num;
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+
+        List<Integer> idList = new ArrayList<Integer>();
+        try {
+            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO'");
+            idList = q.getResultList();
+            if (idList.isEmpty()) {
+                num = 1;
+            } else {
+                num = idList.get(0) + 1;
+            }
+        } catch (Exception ex) {
+            num = 1;
+        }
+        em1.close();
+        factory.close();
+        return num;
+    }
+
+    public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String cuoMen) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        int insert = -1;
+        try {
+            insert = em1.createNativeQuery("INSERT INTO PRESTAMO "
+                    + "('ID','CLI_ID','PRO_ID','FECHA_CREACION','FECHA_CONSECION','FECHA_DESEMBOLSO',"
+                    + "'MONTO','PLAZO','INTERES','VALOR_COMISION','VALOR_FINAL','SALDO','ESTADO') "
+                    + "VALUES ('" + id + "', "
+                    + "'" + cli + "', "
+                    + "'" + tiPre + "', "
+                    + "'" + fecCre + "', "
+                    + "'" + fecCon + "', "
+                    + "'" + fecDese + "', "
+                    + "'" + monPres + "', "
+                    + "'" + pla + "', "
+                    + "'" + inte + "', "
+                    + "'" + valComi + "', "
+                    + "'" + monFin + "', "
+                    + "'" + cuoMen + "');").executeUpdate();
+
+        } catch (Exception ex) {
+//            return false;
+        }
+        em1.close();
+        factory.close();
+        if (insert > 0) {
+//            return true;
+        } else {
+//            return false;
+        }
     }
 }
