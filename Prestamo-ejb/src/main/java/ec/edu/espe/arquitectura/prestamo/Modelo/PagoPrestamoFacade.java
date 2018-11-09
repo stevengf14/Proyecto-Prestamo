@@ -68,6 +68,8 @@ public class PagoPrestamoFacade  implements PagoPrestamoFacadeLocal {
         } catch (Exception ex) {
             pre = null;
         }
+        
+           
         em1.close();
         factory.close();
         return pre;
