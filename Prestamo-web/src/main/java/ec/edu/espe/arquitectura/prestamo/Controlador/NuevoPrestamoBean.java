@@ -10,7 +10,6 @@ import ec.edu.espe.arquitectura.prestamo.Entidades.Tabla_Amortizacion;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Total;
 import ec.edu.espe.arquitectura.prestamo.Modelo.Bean_NuevoPrestamoLocal;
 import ec.edu.espe.arquitectura.prestamo.util.FacesUtil;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -24,13 +23,15 @@ import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ViewScoped;
+import org.primefaces.event.FlowEvent;
 
 /**
  *
  * @author Steven
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class NuevoPrestamoBean implements Serializable {
 
     private String cedula;
@@ -48,6 +49,8 @@ public class NuevoPrestamoBean implements Serializable {
     private double coutas;
     private double comision;
     private int numPrestamo;
+    private boolean prestamo;
+    private boolean detallePrestamo;
     @EJB
     Bean_NuevoPrestamoLocal bean_nuevoPrestamo;
 
@@ -185,8 +188,22 @@ public class NuevoPrestamoBean implements Serializable {
     public void setNumPrestamo(int numPrestamo) {
         this.numPrestamo = numPrestamo;
     }
-    
-    
+
+    public boolean isPrestamo() {
+        return prestamo;
+    }
+
+    public void setPrestamo(boolean prestamo) {
+        this.prestamo = prestamo;
+    }
+
+    public boolean isDetallePrestamo() {
+        return detallePrestamo;
+    }
+
+    public void setDetallePrestamo(boolean detallePrestamo) {
+        this.detallePrestamo = detallePrestamo;
+    }
 
     public String aceptar() {
         cli = bean_nuevoPrestamo.verificarCliente(cedula);
@@ -196,8 +213,7 @@ public class NuevoPrestamoBean implements Serializable {
                 if (bean_nuevoPrestamo.validarMonto(tipo, monto)) {
                     if (bean_nuevoPrestamo.validarPlazo(tipo, plazo)) {
                         CargarTabla();
-                        calculosConfirmacion();
-                        return "DetallePrestamo";
+                        return "ConfirmacionPrestamo";
                     } else {
                         FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajePlazo(tipo));
                         return "";
@@ -258,7 +274,7 @@ public class NuevoPrestamoBean implements Serializable {
 
     public void calculosConfirmacion() {
         Date fecha = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
         this.fechaCreacion = format.format(fecha);
 
         Calendar calendar = Calendar.getInstance();
@@ -276,8 +292,36 @@ public class NuevoPrestamoBean implements Serializable {
 
         this.numPrestamo = bean_nuevoPrestamo.EncontrarIdPrestamo(this.tipo);
     }
-    
-    public void guardarPrestamo(){
-       bean_nuevoPrestamo.insertarPrestamo(this.numPrestamo+"", "1", this.tipo, this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto+"", this.plazo+"", "0.5", this.comision+"", this.montoFinal+"", this.coutas+"");
+
+    public void guardarPrestamo() {
+        System.out.println("datos: " + numPrestamo + ", " + fechaConcesion + "," + monto);
+        bean_nuevoPrestamo.insertarPrestamo(this.numPrestamo + "", "1", "1", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", "0.5", this.comision + "", this.montoFinal + "", this.coutas + "");
+
+    }
+
+    public String onFlowProcess(FlowEvent event) {
+        if(event.getNewStep().equals("detalle")) {
+//            prestamo = false;   //reset in case user goes back
+            aceptar();            
+            return event.getNewStep();
+        } else if(event.getNewStep().equals("confirmacion")){
+            System.out.println(this.amortizacion.size());
+            calculosConfirmacion();
+            return event.getNewStep();
+        }
+        else {
+            return event.getNewStep();
+        }
+//        if (prestamo) {
+////            prestamo = false;   //reset in case user goes back
+//            aceptar();
+//            return "detalle";
+//        } else if (detalle) {
+//            System.out.println(this.amortizacion.size());
+//            calculosConfirmacion();
+//            return  "confirmacion";
+//        } else {
+//            return event.getNewStep();
+//        }
     }
 }

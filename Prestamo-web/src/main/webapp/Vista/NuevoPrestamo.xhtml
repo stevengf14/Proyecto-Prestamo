@@ -4,7 +4,8 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      >
 
     <body>
 
@@ -12,39 +13,178 @@
 
             <ui:define name="content">
                 <h:form>
-                    <p:panel id="Nuevo_Prestamo" header="Nuevo Préstamo" style="width: 30%; margin: auto;border-style: solid;border-width: 5px">
-                        <p:panelGrid class="ui-noborder" columns="2" style="width: 30%; margin: auto; margin-bottom:10px">
-                            <p:outputLabel for="cedula" value="Cédula: " />
-                            <p:inputMask id="cedula" required="true" value="#{nuevoPrestamoBean.cedula}" mask="9999999999"/>
-                            
-                            
-                            <p:outputLabel for="tipo_credito" value="Tipo de Crédito: " />
-                            <p:selectOneMenu id="tipo_credito" value="#{nuevoPrestamoBean.tipo}" style="width:125px">
-                                <f:selectItem itemLabel="Quirografario" itemValue="Quirografario" />
-                                <f:selectItem itemLabel="Hipotecario" itemValue="Hipotecario" />
-                                <f:selectItem itemLabel="Vehicular" itemValue="Vehicular" />
-                                <f:selectItem itemLabel="Comercial" itemValue="Comercial" />
-                            </p:selectOneMenu>
-                            
-                            
-                            <p:outputLabel for="monto" value="Monto: " />
-                            <p:inputNumber id="monto" required="true" value="#{nuevoPrestamoBean.monto}" />
-                           
-                            
-                            <p:outputLabel for="plazo" value="Plazo (meses): " />
-                            <p:inputText id="plazo"  required="true" value="#{nuevoPrestamoBean.plazo}" maxlength="3" onkeypress="if((event.which &lt; 48 &amp;&amp; event.which != 44 &amp;&amp; event.which != 46) || event.which &gt; 57) return false;"/>
-                            
-                        </p:panelGrid>
-                        <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.aceptar()}" ajax="false" />
-                    </p:panel>
-                    
-                    <p:messages globalOnly="true" showDetail="true" severity="warn" />
+                    <!--<p:growl id="growl" sticky="true" showDetail="true"/>--> 
+                    <p:wizard flowListener="#{nuevoPrestamoBean.onFlowProcess}">
+                        <p:tab id="prestamo" title="Personal">
+                            <p:panel id="Nuevo_Prestamo" header="Nuevo Préstamo" style="width: 30%; margin: auto;border-style: solid;border-width: 5px">
+                                <p:panelGrid class="ui-noborder" columns="2" style="width: 30%; margin: auto; margin-bottom:10px">
+                                    <p:outputLabel for="cedula" value="Cédula: " />
+                                    <p:inputMask id="cedula" required="true" value="#{nuevoPrestamoBean.cedula}" mask="9999999999"/>
+
+
+                                    <p:outputLabel for="tipo_credito" value="Tipo de Crédito: " />
+                                    <p:selectOneMenu id="tipo_credito" value="#{nuevoPrestamoBean.tipo}" style="width:125px">
+                                        <f:selectItem itemLabel="Quirografario" itemValue="Quirografario" />
+                                        <f:selectItem itemLabel="Hipotecario" itemValue="Hipotecario" />
+                                        <f:selectItem itemLabel="Vehicular" itemValue="Vehicular" />
+                                        <f:selectItem itemLabel="Comercial" itemValue="Comercial" />
+                                    </p:selectOneMenu>
+
+                                    <p:outputLabel for="monto" value="Monto: " />
+                                    <p:inputNumber id="monto" required="true" value="#{nuevoPrestamoBean.monto}" />
+
+                                    <p:outputLabel for="plazo" value="Plazo (meses): " />
+                                    <p:inputText id="plazo"  required="true" value="#{nuevoPrestamoBean.plazo}" maxlength="3" >
+                                        <f:convertNumber integerOnly="true" type="number"/>
+                                    </p:inputText>
+                                </p:panelGrid>
+                                <p:commandButton id="aceptarn" value="Aceptar" action="#{nuevoPrestamoBean.aceptar()}" ajax="false" />
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="detalle" title="Detalle Préstamo">
+                            <p:panel id="Datos" header="Datos del Préstamo" >
+                                <p:panelGrid  class="ui-noborder" columns="4" >
+                                    <p:outputLabel for="ced" value="Cédula: " />
+                                    <p:outputLabel id='ced' value="#{nuevoPrestamoBean.cli.cedula} " />
+
+                                    <p:outputLabel for="Seguro_Desgravamend" value="Seguro Desgravamen: " />
+                                    <p:outputLabel id='Seguro_Desgravamend' value="0.5%" />
+
+                                    <p:outputLabel for="nombred" value="Nombre: " />
+                                    <p:outputLabel id='nombred' value="#{nuevoPrestamoBean.cli.nombre}" />
+
+                                    <p:outputLabel for="gastod" value="Gastos Administrativos: " />
+                                    <p:outputLabel id='gastod' value="0.5%" />
+
+                                    <p:outputLabel for="tipod" value="Tipo de Préstamo: " />
+                                    <p:outputLabel id='tipod' value="#{nuevoPrestamoBean.tipo}" />
+
+                                    <p:outputLabel for="solcad" value="Contribución Atención Integral al Cáncer: " />
+                                    <p:outputLabel id='solcad' value="0.5%" />
+
+                                    <p:outputLabel for="montod" value="Monto: " />
+                                    <p:outputLabel id='montod' value="#{nuevoPrestamoBean.monto}" />
+
+                                    <p:outputLabel for="tid" value="Tasa de Interés: " />
+                                    <p:outputLabel id='tid' value="2%" />
+                                </p:panelGrid>
+                            </p:panel>
+                            <br></br>
+                            <p:panel id="Amortización" header="Tabla de Amortización" >
+                                <p:dataTable var="amort" value="#{nuevoPrestamoBean.amortizacion}">
+                                    <p:column headerText="No. Cuota">
+                                        <h:outputText value="#{amort.numero}" />
+                                    </p:column>
+
+                                    <p:column headerText="Fecha de Pago">
+                                        <h:outputText value="#{amort.fecha_amortizacion}" />
+                                    </p:column>
+
+                                    <p:column headerText="Capital">
+                                        <h:outputText value="#{amort.capital}" />
+                                    </p:column>
+
+                                    <p:column headerText="Interés">
+                                        <h:outputText value="#{amort.interes}" />
+                                    </p:column>
+
+                                    <p:column headerText="Valor Cuota">
+                                        <h:outputText value="#{amort.valor_cuota}" />
+                                    </p:column>
+                                    <p:column headerText="Saldo">
+                                        <h:outputText value="#{amort.saldo}" />
+                                    </p:column>
+                                    <p:column headerText="Estado">
+                                        <h:outputText value="#{amort.estado}" />
+                                    </p:column>
+                                </p:dataTable>
+                                <p:dataTable var="tot" value="#{nuevoPrestamoBean.lista_total}">
+                                    <p:column>
+                                        <h:outputText value="#{tot.numero}" />
+                                    </p:column>
+                                    <p:column >
+                                        <h:outputText value="#{tot.fecha_amortizacion}" />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{tot.capital}" />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{tot.interes}" />
+                                    </p:column>
+                                    <p:column >
+                                        <h:outputText value="#{tot.valor_cuota}" />
+                                    </p:column>
+                                    <p:column >
+                                        <h:outputText value="#{tot.saldo}" />
+                                    </p:column>
+                                    <p:column>
+                                        <h:outputText value="#{tot.estado}" />
+                                    </p:column>
+                                </p:dataTable>
+                            </p:panel>
+                        </p:tab>
+                        <p:tab id="confirmacion" title="Confirmar Prestamo">
+                            <p:panel id="confirmarPrestamo" header="Confirmación De Préstamo" style="width: 80%; margin: auto;" >
+                                <p:panelGrid  class="ui-noborder" columns="4" >
+                                    <p:outputLabel for="numPrestamo" value="Nro. Préstamo: " />
+                                    <p:outputLabel id='numPrestamo' value="#{nuevoPrestamoBean.numPrestamo}" />
+
+                                    <p:outputLabel for="fechaCreacion" value="Fecha Creación: " />
+                                    <p:outputLabel id='fechaCreacion' value="#{nuevoPrestamoBean.fechaCreacion}" />
+
+                                    <p:outputLabel for="clic" value="Cliente: " />
+                                    <p:outputLabel id='clic' value="#{nuevoPrestamoBean.cli.nombre}" />
+
+                                    <p:outputLabel for="fechaConsecion" value="Fecha Conseción: " />
+                                    <p:outputLabel id='fechaConsecion' value="#{nuevoPrestamoBean.fechaConcesion}" />
+
+                                    <p:outputLabel for="tipoPrestamoc" value="Tipo de Préstamo: " />
+                                    <p:outputLabel id='tipoPrestamoc' value="#{nuevoPrestamoBean.tipo}" />
+
+                                    <p:outputLabel for="fechaDesembolso" value="Fecha Desembolso: " />
+                                    <p:outputLabel id='fechaDesembolso' value="#{nuevoPrestamoBean.fechaDesembolso}" />
+
+                                    <p:outputLabel for="montoPrestadoc" value="Monto Prestado: $" />
+                                    <p:outputLabel id='montoPrestadoc' value="#{nuevoPrestamoBean.monto}" />
+
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
+
+                                    <p:outputLabel for="plazoC" value="Plazo: " />
+                                    <p:outputLabel id='plazoC' value="#{nuevoPrestamoBean.plazo} meses" />
+
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
+
+                                    <p:outputLabel for="interesC" value="Interés: " />
+                                    <p:outputLabel id='interesC' value="0.5%" />
+
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
+
+                                    <p:outputLabel for="valorComision" value="Valor Comisión: $" />
+                                    <p:outputLabel id='valorComision' value="#{nuevoPrestamoBean.comision}" />
+
+                                    <p:outputLabel/>
+                                    <p:outputLabel/>
+
+                                    <p:outputLabel for="montoFinal" value="Monto Final: $" />
+                                    <p:outputLabel id='montoFinal' value="#{nuevoPrestamoBean.montoFinal}" />
+
+                                    <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales: $" />
+                                    <p:outputLabel id='cuotasMensuales' value="#{nuevoPrestamoBean.coutas}" />
+                                </p:panelGrid>
+                                <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" ajax="false" />
+                            </p:panel>
+                        </p:tab>
+                        <!--<p:messages globalOnly="true" showDetail="true" severity="warn" />-->
+                    </p:wizard>
                 </h:form>
 
             </ui:define>
 
-            <ui:define name="bottom">
-            </ui:define>
+<!--            <ui:define name="bottom">
+            </ui:define>-->
 
         </ui:composition>
 

@@ -245,20 +245,20 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         int insert = -1;
         try {
             insert = em1.createNativeQuery("INSERT INTO PRESTAMO "
-                    + "('ID','CLI_ID','PRO_ID','FECHA_CREACION','FECHA_CONSECION','FECHA_DESEMBOLSO',"
-                    + "'MONTO','PLAZO','INTERES','VALOR_COMISION','VALOR_FINAL','SALDO','ESTADO') "
-                    + "VALUES ('" + id + "', "
-                    + "'" + cli + "', "
-                    + "'" + tiPre + "', "
+                    + "(ID,CLI_ID,PRO_ID,FECHA_CREACION,FECHA_CONSECION,FECHA_DESEMBOLSO,"
+                    + "MONTO,PLAZO,INTERES,VALOR_COMISION,VALOR_FINAL,SALDO,ESTADO) "
+                    + "VALUES (" + id + ", "
+                    + "" + cli + ", "
+                    + "" + tiPre + ", "
                     + "'" + fecCre + "', "
                     + "'" + fecCon + "', "
                     + "'" + fecDese + "', "
-                    + "'" + monPres + "', "
-                    + "'" + pla + "', "
-                    + "'" + inte + "', "
-                    + "'" + valComi + "', "
-                    + "'" + monFin + "', "
-                    + "'" + cuoMen + "');").executeUpdate();
+                    + "" + monPres + ", "
+                    + "" + pla + ", "
+                    + "" + inte + ", "
+                    + "" + valComi + ", "
+                    + "" + monFin + ", "
+                    + "" + cuoMen + ");").executeUpdate();
 
         } catch (Exception ex) {
 //            return false;
