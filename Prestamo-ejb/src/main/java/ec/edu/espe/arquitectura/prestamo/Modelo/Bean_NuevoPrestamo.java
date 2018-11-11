@@ -196,7 +196,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
 
     public List<String> GenerarFechas(int plazoPrestamo) {
         List<String> lista = new ArrayList<String>();
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd-MM-yyyy");
         LocalDate ahora = LocalDate.now();
         int mes = ahora.getMonthValue();
         int anio = ahora.getYear();
@@ -204,14 +204,14 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         if (dia == 29 || dia == 30 || dia == 31) {
             dia = 1;
         }
-        lista.add(anio + "-" + mes + "-" + dia);
+        lista.add(dia + "-" + mes + "-" + anio);
         for (int i = 0; i < plazoPrestamo; i++) {
             mes = mes + 1;
             if (mes == 13) {
                 mes = 1;
                 anio = anio + 1;
             }
-            lista.add(anio + "-" + mes + "-" + dia);
+            lista.add(dia + "-" + mes + "-" + anio);
         }
 
         return lista;
@@ -222,15 +222,44 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
         EntityManager em1 = factory.createEntityManager();
 
-        List<Integer> idList = new ArrayList<Integer>();
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
+        //try {
+        Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO");
+        idList = q.getResultList();
+        num = idList.get(0).intValue() + 1;
+        //} catch (Exception ex) {
+        //num = 1;
+        //}
+        em1.close();
+        factory.close();
+        return num;
+    }
+
+    public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String estado) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
         try {
-            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO'");
+            em1.getTransaction().begin();
+            Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + inte + ", " + valComi + ", " + monFin + ", 500, '" + estado + "')");
+            q.executeUpdate();
+            em1.getTransaction().commit();
+        } catch (Exception ex) {
+            em1.getTransaction().rollback();
+        }
+        em1.close();
+        factory.close();
+    }
+
+    public int EncontrarClienteId(String cedula) {
+        int num;
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
+        try {
+            Query q = em1.createNativeQuery("SELECT ID FROM CLIENTE WHERE CEDULA='" + cedula + "'");
             idList = q.getResultList();
-            if (idList.isEmpty()) {
-                num = 1;
-            } else {
-                num = idList.get(0) + 1;
-            }
+            num = idList.get(0).intValue() + 1;
         } catch (Exception ex) {
             num = 1;
         }
@@ -239,36 +268,44 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         return num;
     }
 
-    public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String cuoMen) {
+    public int ExtraerNumAmortizacion() {
+        int num;
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
         EntityManager em1 = factory.createEntityManager();
-        int insert = -1;
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
         try {
-            insert = em1.createNativeQuery("INSERT INTO PRESTAMO "
-                    + "(ID,CLI_ID,PRO_ID,FECHA_CREACION,FECHA_CONSECION,FECHA_DESEMBOLSO,"
-                    + "MONTO,PLAZO,INTERES,VALOR_COMISION,VALOR_FINAL,SALDO,ESTADO) "
-                    + "VALUES (" + id + ", "
-                    + "" + cli + ", "
-                    + "" + tiPre + ", "
-                    + "'" + fecCre + "', "
-                    + "'" + fecCon + "', "
-                    + "'" + fecDese + "', "
-                    + "" + monPres + ", "
-                    + "" + pla + ", "
-                    + "" + inte + ", "
-                    + "" + valComi + ", "
-                    + "" + monFin + ", "
-                    + "" + cuoMen + ");").executeUpdate();
-
+            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM AMORTIZACION");
+            idList = q.getResultList();
+            num = idList.get(0).intValue() + 1;
         } catch (Exception ex) {
-//            return false;
+            num = 1;
         }
         em1.close();
         factory.close();
-        if (insert > 0) {
-//            return true;
-        } else {
-//            return false;
+        return num;
+    }
+
+    public boolean InsertarAmortizacion(int pre_id, double capital, double interes, double valor_cuota, String fecha, String estado, int numero, double saldo) {
+        int id = ExtraerNumAmortizacion();
+        boolean val = false;
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        try {
+            em1.getTransaction().begin();
+            Query q = em1.createNativeQuery("INSERT INTO AMORTIZACION VALUES(" + id + "," + pre_id + "," + capital + "," + interes + "," + valor_cuota + ",'" + fecha + "','" + estado + "'," + numero + "," + saldo + ")");
+            int num = q.executeUpdate();
+            if (num < 0) {
+                val = true;
+            } else {
+                val = false;
+            }
+            em1.getTransaction().commit();
+        } catch (Exception ex) {
+            val = false;
+            em1.getTransaction().rollback();
         }
+        em1.close();
+        factory.close();
+        return val;
     }
 }

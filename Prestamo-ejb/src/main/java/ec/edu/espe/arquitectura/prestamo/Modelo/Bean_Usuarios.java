@@ -48,4 +48,18 @@ public class Bean_Usuarios implements Bean_UsuariosLocal {
         factory.close();
         return user_login;
     }
+    
+    public void insert() {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+            //Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (5, 2, 2, '12-11-2018', '12-11-2018', '12-11-2018', 1222, 22, 12, 12, 205, 500, 'act');");
+            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO");
+            q.getResultList();
+            em1.getTransaction().commit();
+//            return false;
+            //em1.getTransaction().rollback();
+        
+        em1.close();
+        factory.close();
+    }
 }
