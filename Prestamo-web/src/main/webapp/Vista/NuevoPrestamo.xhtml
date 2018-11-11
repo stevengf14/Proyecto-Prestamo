@@ -38,9 +38,11 @@
                                         <f:convertNumber integerOnly="true" type="number"/>
                                     </p:inputText>
                                 </p:panelGrid>
-                                <p:commandButton id="aceptarn" value="Aceptar" action="#{nuevoPrestamoBean.aceptar()}" ajax="false" />
+                                
                             </p:panel>
+                            <p:messages globalOnly="true" showDetail="true" severity="warn" />
                         </p:tab>
+                        
                         <p:tab id="detalle" title="Detalle Préstamo">
                             <p:panel id="Datos" header="Datos del Préstamo" >
                                 <p:panelGrid  class="ui-noborder" columns="4" >
@@ -66,7 +68,7 @@
                                     <p:outputLabel id='montod' value="#{nuevoPrestamoBean.monto}" />
 
                                     <p:outputLabel for="tid" value="Tasa de Interés: " />
-                                    <p:outputLabel id='tid' value="2%" />
+                                    <p:outputLabel id='tid' value="16.06%" />
                                 </p:panelGrid>
                             </p:panel>
                             <br></br>
@@ -144,7 +146,7 @@
                                     <p:outputLabel for="fechaDesembolso" value="Fecha Desembolso: " />
                                     <p:outputLabel id='fechaDesembolso' value="#{nuevoPrestamoBean.fechaDesembolso}" />
 
-                                    <p:outputLabel for="montoPrestadoc" value="Monto Prestado: $" />
+                                    <p:outputLabel for="montoPrestadoc" value="Monto Prestado ($):" />
                                     <p:outputLabel id='montoPrestadoc' value="#{nuevoPrestamoBean.monto}" />
 
                                     <p:outputLabel/>
@@ -157,21 +159,21 @@
                                     <p:outputLabel/>
 
                                     <p:outputLabel for="interesC" value="Interés: " />
-                                    <p:outputLabel id='interesC' value="0.5%" />
+                                    <p:outputLabel id='interesC' value="16.06%" />
 
                                     <p:outputLabel/>
                                     <p:outputLabel/>
 
-                                    <p:outputLabel for="valorComision" value="Valor Comisión: $" />
+                                    <p:outputLabel for="valorComision" value="Valor Comisión ($):" />
                                     <p:outputLabel id='valorComision' value="#{nuevoPrestamoBean.comision}" />
 
                                     <p:outputLabel/>
                                     <p:outputLabel/>
 
-                                    <p:outputLabel for="montoFinal" value="Monto Final: $" />
+                                    <p:outputLabel for="montoFinal" value="Monto Final ($): "/>
                                     <p:outputLabel id='montoFinal' value="#{nuevoPrestamoBean.montoFinal}" />
 
-                                    <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales: $" />
+                                    <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales ($):" />
                                     <p:outputLabel id='cuotasMensuales' value="#{nuevoPrestamoBean.coutas}" />
                                 </p:panelGrid>
                                 <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" ajax="false" />

@@ -9,6 +9,7 @@ import ec.edu.espe.arquitectura.prestamo.Entidades.Cliente;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Tabla_Amortizacion;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Total;
 import ec.edu.espe.arquitectura.prestamo.Modelo.Bean_NuevoPrestamoLocal;
+import ec.edu.espe.arquitectura.prestamo.Modelo.Bean_Usuarios;
 import ec.edu.espe.arquitectura.prestamo.util.FacesUtil;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,6 +25,10 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.Query;
 import org.primefaces.event.FlowEvent;
 
 /**
@@ -205,7 +210,7 @@ public class NuevoPrestamoBean implements Serializable {
         this.detallePrestamo = detallePrestamo;
     }
 
-    public String aceptar() {
+    public boolean aceptar() {
         cli = bean_nuevoPrestamo.verificarCliente(cedula);
         amortizacion.clear();
         if (cli != null) {
@@ -213,14 +218,14 @@ public class NuevoPrestamoBean implements Serializable {
                 if (bean_nuevoPrestamo.validarMonto(tipo, monto)) {
                     if (bean_nuevoPrestamo.validarPlazo(tipo, plazo)) {
                         CargarTabla();
-                        return "ConfirmacionPrestamo";
+                        return true;
                     } else {
                         FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajePlazo(tipo));
-                        return "";
+                        return false;
                     }
                 } else {
                     FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajeMonto(tipo));
-                    return "";
+                    return false;
                 }
             } else {
                 if (tipo.equals("Comercial")) {
@@ -228,16 +233,17 @@ public class NuevoPrestamoBean implements Serializable {
                 } else {
                     FacesUtil.addMessageWarn(null, "Los clientes jurídicos pueden acceder únicamente a préstamos comerciales");
                 }
-                return "";
+                return false;
             }
         } else {
             FacesUtil.addMessageWarn(null, "El cliente no existe");
-            return "";
+            return false;
         }
 
     }
 
     public void CargarTabla() {
+        lista_total.clear();
         Tabla_Amortizacion ta;
         double interes_anual = 16.06;
         double interes_mensual = interes_anual / 12 / 100;
@@ -274,7 +280,7 @@ public class NuevoPrestamoBean implements Serializable {
 
     public void calculosConfirmacion() {
         Date fecha = new Date();
-        DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         this.fechaCreacion = format.format(fecha);
 
         Calendar calendar = Calendar.getInstance();
@@ -289,27 +295,31 @@ public class NuevoPrestamoBean implements Serializable {
         this.comision = com;
         this.montoFinal = this.monto - com;
         this.coutas = amortizacion.get(sizefechas).getValor_cuota();
-
-        this.numPrestamo = bean_nuevoPrestamo.EncontrarIdPrestamo(this.tipo);
+        this.numPrestamo = bean_nuevoPrestamo.ExtraerNumPrestamo();
     }
 
     public void guardarPrestamo() {
         System.out.println("datos: " + numPrestamo + ", " + fechaConcesion + "," + monto);
-        bean_nuevoPrestamo.insertarPrestamo(this.numPrestamo + "", "1", "1", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", "0.5", this.comision + "", this.montoFinal + "", this.coutas + "");
-
+        bean_nuevoPrestamo.insertarPrestamo(numPrestamo + "", bean_nuevoPrestamo.EncontrarClienteId(cedula) + "", bean_nuevoPrestamo.EncontrarIdPrestamo(tipo) + "", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", "16.06", "0.15", this.montoFinal + "", "act");
+        for (int i = 0; i < amortizacion.size(); i++) {
+            bean_nuevoPrestamo.InsertarAmortizacion(numPrestamo, amortizacion.get(i).getCapital(), amortizacion.get(i).getInteres(), amortizacion.get(i).getValor_cuota(), amortizacion.get(i).getFecha_amortizacion(), amortizacion.get(i).getEstado(), amortizacion.get(i).getNumero(), amortizacion.get(i).getCapital());
+        }
     }
 
     public String onFlowProcess(FlowEvent event) {
-        if(event.getNewStep().equals("detalle")) {
-//            prestamo = false;   //reset in case user goes back
-            aceptar();            
-            return event.getNewStep();
-        } else if(event.getNewStep().equals("confirmacion")){
+        if (event.getNewStep().equals("detalle")) {
+            if (aceptar()) {
+                
+                return event.getNewStep();
+            } else {
+                //FacesUtil.addMessageWarn(null, "Los clientes jurídicos pueden acceder únicamente a préstamos comerciales");
+                return event.getOldStep();
+            }
+        } else if (event.getNewStep().equals("confirmacion")) {
             System.out.println(this.amortizacion.size());
             calculosConfirmacion();
             return event.getNewStep();
-        }
-        else {
+        } else {
             return event.getNewStep();
         }
 //        if (prestamo) {
