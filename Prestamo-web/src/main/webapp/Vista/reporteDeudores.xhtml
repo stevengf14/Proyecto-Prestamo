@@ -10,43 +10,41 @@
         <ui:composition template="./../Templates/plantillaPaginas.xhtml">
 
             <ui:define name="content">
-                <p:panel id="Datos" header="Datos Reporte de Deudores">
-                    <p:panelGrid  class="ui-noborder" columns="2" >
-                        <p:outputLabel for="fechaReporte" value="Fecha Reporte: " />
-                        <p:calendar id='fechaReporte' value="#{now}" pattern="dd/MM/yy"/>                 
-                        
-                        <p:outputLabel for="button" value="Fecha Inicial: " />
-                        <p:calendar id="button" value="#{calendarView.date1}" showOn="button" />
-                    </p:panelGrid>
-                </p:panel>
-                <br></br>
-                <p:panel id="deudores" header="Resumen de Deudores">
-                    <p:dataTable var="car" value="#{dtBasicView.cars}">
-                        <p:column headerText="Tipo Deudor">
-                            <h:outputText value="#{car.id}" />
-                        </p:column>
+                <h:form>
+                    <p:panel id="Datos" header="Datos Reporte de Deudores">
+                        <p:panelGrid  class="ui-noborder" columns="2" >
+                            <p:outputLabel for="fechaReporte" value="Fecha Inicial: " />
+                            <p:calendar id='fechaReporte' value="#{now}" pattern="dd/MM/yy"/>                 
 
-                        <p:column headerText="Cédula">
-                            <h:outputText value="#{car.year}" />
-                        </p:column>
+                            
+                        </p:panelGrid>
+                    </p:panel>
+                    <br></br>
+                    <p:panel id="deudores" header="Resumen de Deudores">
+                        <p:dataTable var="deudor" value="#{reporteMBean.reporte}">
+                            <p:column headerText="Tipo Deudor">
+                                <h:outputText value="#{deudor.tipoDeudor}" />
+                            </p:column>
 
-                        <p:column headerText="Nombre y Apellido">
-                            <h:outputText value="#{car.brand}" />
-                        </p:column>
+                            <p:column headerText="Cédula">
+                                <h:outputText value="#{deudor.cedula}" />
+                            </p:column>
 
-                        <p:column headerText="Valor de la Deuda">
-                            <h:outputText value="#{car.color}" />
-                        </p:column>
+                            <p:column headerText="Nombre y Apellido">
+                                <h:outputText value="#{deudor.nombreApellido}" />
+                            </p:column>
 
-                        <p:column headerText="Estado de la Deuda">
-                            <h:outputText value="#{car.color}" />
-                        </p:column>
-                    </p:dataTable>
-                </p:panel>
-            </ui:define>
-            
-            <ui:define name="bottom">
-                bottom
+                            <p:column headerText="Valor de la Deuda">
+                                <h:outputText value="#{deudor.valorDeduda}" />
+                            </p:column>
+
+                            <p:column headerText="Estado de la Deuda">
+                                <h:outputText value="#{deudor.estadoDeuda}" />
+                            </p:column>                                            
+                        </p:dataTable>
+                        <p:commandButton id="aceptar" value="Aceptar" action="#{deudor.llenarTabla()}" ajax="false" />
+                    </p:panel>                    
+                </h:form>
             </ui:define>
         </ui:composition>
     </body>
