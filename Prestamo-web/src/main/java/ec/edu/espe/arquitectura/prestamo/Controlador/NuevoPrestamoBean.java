@@ -298,12 +298,13 @@ public class NuevoPrestamoBean implements Serializable {
         this.numPrestamo = bean_nuevoPrestamo.ExtraerNumPrestamo();
     }
 
-    public void guardarPrestamo() {
+    public String guardarPrestamo() {
         System.out.println("datos: " + numPrestamo + ", " + fechaConcesion + "," + monto);
         bean_nuevoPrestamo.insertarPrestamo(numPrestamo + "", bean_nuevoPrestamo.EncontrarClienteId(cedula) + "", bean_nuevoPrestamo.EncontrarIdPrestamo(tipo) + "", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", "16.06", "0.15", this.montoFinal + "", "act");
-        for (int i = 0; i < amortizacion.size(); i++) {
+        for (int i = 1; i < amortizacion.size(); i++) {
             bean_nuevoPrestamo.InsertarAmortizacion(numPrestamo, amortizacion.get(i).getCapital(), amortizacion.get(i).getInteres(), amortizacion.get(i).getValor_cuota(), amortizacion.get(i).getFecha_amortizacion(), amortizacion.get(i).getEstado(), amortizacion.get(i).getNumero(), amortizacion.get(i).getCapital());
         }
+        return "NuevoPrestamo";
     }
 
     public String onFlowProcess(FlowEvent event) {

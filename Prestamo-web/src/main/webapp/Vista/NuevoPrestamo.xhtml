@@ -176,7 +176,13 @@
                                     <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales ($):" />
                                     <p:outputLabel id='cuotasMensuales' value="#{nuevoPrestamoBean.coutas}" />
                                 </p:panelGrid>
-                                <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" ajax="false" />
+                               <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" update="@form" >
+                                    <p:confirm header="Confirmación" message="Desea guardar el préstamo?" icon="pi pi-exclamation-triangle" />
+                                </p:commandButton>
+                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"  action="#{nuevoPrestamoBean.guardarPrestamo()}" />
+                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                                </p:confirmDialog>
                             </p:panel>
                         </p:tab>
                         <!--<p:messages globalOnly="true" showDetail="true" severity="warn" />-->

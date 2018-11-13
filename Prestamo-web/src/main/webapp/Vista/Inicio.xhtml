@@ -10,11 +10,56 @@
         <ui:composition template="./../Templates/plantillaPaginas.xhtml">
 
             <ui:define name="content">
-                content
+                
             </ui:define>
 
             <ui:define name="bottom">
                 <h:form>
+                    <p:accordionPanel style="margin-top:20px">
+                        <p:tab title="Información del Proyecto">
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-4,ui-grid-col-8" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputText value="Arquitectura de Software"/>
+                                <br></br>
+                                <h:outputText value="Ingeniero: Henry Coral"/>
+                                <br></br>
+                                <h:outputText value="Integrantes:"/>
+                                <br></br>
+                                <h:outputText value="García Santiago"/>
+                                <br></br>
+                                <h:outputText value="Guaman Steven"/>
+                                <br></br>
+                                <h:outputText value="Pico Solange"/>
+                                <br></br>
+                                <h:outputText value="Torres Alejandro"/>
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab title="Módulo">
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+
+                                <h:outputText value="Un préstamo es una operación por la cual una entidad financiera pone a nuestra disposición una cantidad determinada de dinero mediante un contrato. En un préstamo nosotros adquirimos la obligación de devolver ese dinero en un plazo de tiempo establecido y de pagar unas comisiones e intereses acordados." />
+                            </p:panelGrid>
+                        </p:tab>
+                        <p:tab title="Tipos de Préstamos">
+                            <p:panelGrid columns="2" columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid" styleClass="ui-panelgrid-blank">
+                                <h:outputText value="Préstamo Quilografario"/>
+                                <br></br>
+                                <h:outputText value="El préstamo Quirografario es destinado para que los afiliados o jubilados, sujetos de crédito, puedan obtener recursos para solventar sus necesidades de consumo. Crédito de consumo al interés más bajo del mercado. Desembolso en máximo 72 horas a partir de su aprobación."/>
+                                <br></br>
+                                <h:outputText value="Préstamo Hipotecario"/>
+                                <br></br>
+                                <h:outputText value="El préstamo hipotecario es un producto financiero mediante el que una entidad financiera nos presta dinero en base a una garantía real, que es nuestro inmueble (vivienda, plaza garaje, trastero, local, solar, etc.). En caso de impago, la entidad nos podrá requerir el pago del dinero adeudado mediante un procedimiento judicial y en último caso, se podrá quedar con nuestra vivienda como parte total o parcial del cobro de la deuda."/>
+                                <br></br>
+                                <h:outputText value="Préstamo Vehicular"/>
+                                <br></br>
+                                <h:outputText value="El préstamo vehicular es un producto financiero ofrecido por todas las entidades financieras de Colombia. Todos los colombianos que quieran comprar un auto nuevo o usado pueden solicitar su préstamo a tasas fijas o variables. ... El crédito vehicular es una opción de financiamiento para comprar tu auto propio."/>
+                                <br></br>
+                                <h:outputText value="Préstamo Comercial"/>
+                                <br></br>
+                                <h:outputText value="Los Créditos Comerciales son montos de dinero en moneda chilena o extranjera que otorga el Banco a empresas de diverso tamaño para satisfacer necesidades de Capital de Trabajo, adquisición de bienes, pago de servicios orientados a la operación de la misma o para refinanciar pasivos con otras instituciones y proveedores"/>
+                                </p:panelGrid>
+                        </p:tab>
+                    </p:accordionPanel>
+                    <br></br>
                     <p:commandButton value="Cerrar Día" action="#{cerrarDiaBean.cerrarDia()}"/>
                 </h:form>
             </ui:define>
