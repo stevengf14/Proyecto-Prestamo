@@ -6,6 +6,8 @@
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Amortizacion;
+import ec.edu.espe.arquitectura.prestamo.Entidades.PagoPrestamo;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Prestamo;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -15,6 +17,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -204,6 +207,7 @@ public class PagoPrestamoFacade  implements PagoPrestamoFacadeLocal {
         return date1;
     }
      
+ @Override
      public List<String> GenerarFechas(int plazoPrestamo, Date actual) {
         List<String> lista = new ArrayList<String>();
          System.out.println(actual.getYear());
@@ -235,6 +239,73 @@ public class PagoPrestamoFacade  implements PagoPrestamoFacadeLocal {
      }
       
         return lista;
+    }
+     
+ @Override
+    public String CompararFechas(String fecha) {
+        String estado; 
+        Date fechaActual = new Date();
+        SimpleDateFormat sm = new SimpleDateFormat("yyyy-MM-dd");
+        Date fechaCompara=null;
+        try {
+            fechaCompara = sm.parse(fecha);
+        } catch (ParseException ex) {
+            Logger.getLogger(PagoPrestamoFacade.class.getName()).log(Level.SEVERE, null, ex);
+        }
+         Calendar c = Calendar.getInstance();
+         c.setTime(fechaActual);
+         c.add(Calendar.HOUR, -2);
+         if (fechaCompara.compareTo(fechaActual) >= 0 ) {
+           estado="Pendiente";
+        }else{
+             estado="Mora";
+         }
+        
+        return estado;
+    }
+    
+    public void insertPago(PagoPrestamo pago) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        
+        try {
+             Query q3 = em1.createNativeQuery("INSERT into PAGO_PRESTAMO values");
+            
+            
+        } catch (Exception ex) {
+           
+            System.out.println(ex);
+        }
+      
+    }
+    
+    public List<Amortizacion> busquedaAmortizacion(String cedula) {
+        
+        
+        List<BigDecimal> id = new ArrayList<BigDecimal>();
+        List<String> cedulaList = new ArrayList<String>();
+        List<Amortizacion> amor = new ArrayList<Amortizacion>();
+        int idmonto;
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        try {
+             Query q3 = em1.createNativeQuery("SELECT CEDULA FROM CLIENTE WHERE CEDULA='" + cedula + "'");
+            Query q2 = em1.createNativeQuery("SELECT PRESTAMO.ID FROM PRESTAMO  INNER JOIN CLIENTE ON PRESTAMO.CLI_ID = CLIENTE.ID WHERE CLIENTE.CEDULA ='" + cedula + "'");
+            
+            cedulaList=q3.getResultList();
+            
+            id = q2.getResultList();
+            BigDecimal bd=id.get(0);
+            idmonto=bd.intValue();
+           Query q1 = em1.createNativeQuery("SELECT ID,PRE_ID,CAPITAL,INTERES,VALOR_CUOTA,FECHA_AMORTIZACION,ESTADO,NUMERO,SALDO FROM AMORTIZACION  WHERE PRE_ID ='" + idmonto + "'", Amortizacion.class );
+          
+           amor= q1.getResultList();
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+        em1.close();
+        factory.close();
+        return amor;
     }
     
 }

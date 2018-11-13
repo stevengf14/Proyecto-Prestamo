@@ -6,7 +6,9 @@
 package ec.edu.espe.arquitectura.prestamo.Modelo;
 
 
+import ec.edu.espe.arquitectura.prestamo.Entidades.Amortizacion;
 import ec.edu.espe.arquitectura.prestamo.Entidades.Prestamo;
+
 import java.util.Date;
 import java.util.List;
 import javax.ejb.Local;
@@ -24,5 +26,7 @@ public interface PagoPrestamoFacadeLocal {
  public String busquedaNombre(String cedula);
  public Date busquedaFecha(String cedula);
  public List<String> GenerarFechas(int plazoPrestamo, Date actual);
+ public String CompararFechas(String fecha); 
+ public List<Amortizacion> busquedaAmortizacion(String cedula);
     
 }
