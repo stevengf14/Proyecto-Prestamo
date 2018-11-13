@@ -308,4 +308,74 @@ public class PagoPrestamoFacade  implements PagoPrestamoFacadeLocal {
         return amor;
     }
     
+      public boolean insertarPago(String id, String amo_id, String fechaPago, String valorCargos, String valortToal, String valorPagado) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        boolean val = false;
+        try {
+            em1.getTransaction().begin();
+            Query q = em1.createNativeQuery("INSERT INTO PAGO_PRESTAMO VALUES (" + id + "," + amo_id + ",TO_DATE('"+ fechaPago + "','dd/MM/YYYY'),'" + valorCargos + "', '" + valortToal + "', '" + valorPagado  + "')");
+            int num=q.executeUpdate();
+            if (num < 0) {
+                val = true;
+            } else {
+                val = false;
+            }
+            em1.getTransaction().commit();
+        } catch (Exception ex) {
+             val = false;
+            em1.getTransaction().rollback();
+        }
+        em1.close();
+        factory.close();
+        return val;
+    }
+      
+        public int ExtraerNumPagoPrestamo() {
+        int num;
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
+        try {
+            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PAGO_PRESTAMO");
+            idList = q.getResultList();
+            num = idList.get(0).intValue() + 1;
+        } catch (Exception ex) {
+            num = 1;
+        }
+        em1.close();
+        factory.close();
+        return num;
+    }
+        
+    public void updateTabla(String id) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        try {
+            em1.getTransaction().begin();
+            Query q = em1.createNativeQuery("UPDATE AMORTIZACION SET ESTADO='Pagado' WHERE ID="  + id  );
+            q.executeUpdate();
+            em1.getTransaction().commit();
+        } catch (Exception ex) {
+            em1.getTransaction().rollback();
+        }
+        em1.close();
+        factory.close();
+    }
+    
+    public void updateTablaPrestamo(String id) {
+        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+        EntityManager em1 = factory.createEntityManager();
+        try {
+            em1.getTransaction().begin();
+            Query q = em1.createNativeQuery("UPDATE PRESTAMO SET ESTADO='Can' WHERE ID="  + id  );
+            q.executeUpdate();
+            em1.getTransaction().commit();
+        } catch (Exception ex) {
+            em1.getTransaction().rollback();
+        }
+        em1.close();
+        factory.close();
+    }
 }

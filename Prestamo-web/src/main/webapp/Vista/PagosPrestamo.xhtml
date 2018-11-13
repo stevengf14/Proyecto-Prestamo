@@ -64,12 +64,12 @@
                                 <p:outputLabel for="total" value="Total a Pagar: " />
                                 <h:outputText id="total" value="#{pagosBean.total}"  />
                                  <p:outputLabel for="valRecibido" value="Valor Recibido:" />
-                                <p:inputText id="valRecibido"  />
+                                 <p:inputText id="valRecibido" value="#{pagosBean.valorRecibido}"  />
 
-                                <p:commandButton id="regPago" value="Registrar Pago" actionListener="#{pagosBean.registrarPago}" update="@form" />
+                                <p:commandButton id="regPago" value="Registrar Pago" actionListener="#{pagosBean.regisPago()}" ajax="false"   />
                             </p:panelGrid>
                         </p:panel>
-                    
+                    <p:messages globalOnly="true" showDetail="true" severity="warn" />
                 </p:panel>
             </h:form>
         </ui:define>

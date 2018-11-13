@@ -28,5 +28,9 @@ public interface PagoPrestamoFacadeLocal {
  public List<String> GenerarFechas(int plazoPrestamo, Date actual);
  public String CompararFechas(String fecha); 
  public List<Amortizacion> busquedaAmortizacion(String cedula);
+  public boolean insertarPago(String id, String amo_id, String fechaPago, String valorCargos, String valortToal, String valorPagado);
+public int ExtraerNumPagoPrestamo();
+ public void updateTabla(String id);
+ public void updateTablaPrestamo(String id);
     
 }

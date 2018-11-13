@@ -15,7 +15,11 @@ import ec.edu.espe.arquitectura.prestamo.Modelo.Bean_NuevoPrestamoLocal;
 import ec.edu.espe.arquitectura.prestamo.Modelo.PagoPrestamoFacadeLocal;
 import ec.edu.espe.arquitectura.prestamo.util.FacesUtil;
 import java.io.Serializable;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
@@ -46,13 +50,42 @@ public class PagosBean implements Serializable {
     private double xCobrar;
     private double valorRecibido;
     private double cambio;
-    private double cargo;
+    private String fechaPago;
+    private static double cargo;
+    private static double total;
+    private static int idAmortizacion;
+    private int idAmort;
     Amortizacion amorti = new Amortizacion();
     private ArrayList<Tabla_Amortizacion> amortizacion = new ArrayList<Tabla_Amortizacion>();
     private ArrayList<Amortizacion> listAmortiza = new ArrayList<Amortizacion>();
     public List<Amortizacion> getListaAmort() {
         return listaAmort;
     }
+
+    public int getIdAmort() {
+        return idAmort;
+    }
+
+    public void setIdAmort(int idAmort) {
+        this.idAmort = idAmort;
+    }
+
+    public String getFechaPago() {
+        return fechaPago;
+    }
+
+    public void setFechaPago(String fechaPago) {
+        this.fechaPago = fechaPago;
+    }
+
+    public int getIdAmortizacion() {
+        return idAmortizacion;
+    }
+
+    public void setIdAmortizacion(int idAmortizacion) {
+        this.idAmortizacion = idAmortizacion;
+    }
+    
 
     public void setListaAmort(List<Amortizacion> listaAmort) {
         this.listaAmort = listaAmort;
@@ -84,7 +117,7 @@ public class PagosBean implements Serializable {
     public void setTotal(double total) {
         this.total = total;
     }
-    private double total;
+    
 
     public List<Amortizacion> getAmortbusqueda() {
         return amortbusqueda;
@@ -169,6 +202,15 @@ public class PagosBean implements Serializable {
         this.nombre = nombre;
     }
     private String cedula = "";
+    private static String cedula1 = "";
+
+    public static String getCedula1() {
+        return cedula1;
+    }
+
+    public static void setCedula1(String cedula1) {
+        PagosBean.cedula1 = cedula1;
+    }
     
     Prestamo pres= new Prestamo();
 
@@ -249,96 +291,86 @@ public class PagosBean implements Serializable {
     }
   
    
-//    public void seleccionFila(SelectEvent event) {
-//        System.out.println(event.);
-////        System.out.println(((Tabla_Amortizacion) event.getObject()).getNumero());
-//        amortizacion.get(1).getValor_cuota();
-//    }
-//    
-//     public void onRowUnselect(UnselectEvent event) {
-//         valorCuota=((Tabla_Amortizacion) event.getObject()).getCapital();
-//    }
- 
-    
-   
-    
- public void cargTabla() {
-         cli = bean_nuevoPrestamo.verificarCliente(cedula);
-            if (cli != null) {
-                
-        System.out.println(bean_pagos.busquedaMonto(cedula));
-        System.out.println(bean_pagos.busquedaPlazo(cedula));
-        nombre=bean_pagos.busquedaNombre(cedula);
-        double interes_anual = 16.06;
-        double interes_mensual = interes_anual / 12 / 100;
-        double interes = 0;
-        double valor_cuota = bean_pagos.busquedaMonto(cedula) * (interes_mensual * Math.pow(1 + interes_mensual, bean_pagos.busquedaPlazo(cedula))) / (Math.pow(interes_mensual + 1, bean_pagos.busquedaPlazo(cedula)) - 1);
-        double capital = 0;
-        double saldo = bean_pagos.busquedaMonto(cedula);
-        List<String> lista_fecha = bean_pagos.GenerarFechas(bean_pagos.busquedaPlazo(cedula),bean_pagos.busquedaFecha(cedula));
-        for (int i = 1; i <= bean_pagos.busquedaPlazo(cedula); i++) {
 
-            if (i == 0) {
-                ta = new Tabla_Amortizacion(i, 0, 0, 0, bean_nuevoPrestamo.Convertir(saldo), lista_fecha.get(i), "");
-            } else {
-                interes = saldo * ((16.06 / 12) / 100);
-                capital = valor_cuota - interes;
-                saldo = saldo - capital;
-                ta = new Tabla_Amortizacion(i, bean_nuevoPrestamo.Convertir(capital), bean_nuevoPrestamo.Convertir(interes), bean_nuevoPrestamo.Convertir(capital + interes), bean_nuevoPrestamo.Convertir(saldo), lista_fecha.get(i), bean_pagos.CompararFechas(lista_fecha.get(i)));
-            }
-            amortizacion.add(ta);
-        }
-        } else {
-            FacesUtil.addMessageWarn(null, "El cliente no existe");
-            
-        }
-        CalculosPago();
-        
-//        Total tot = new Total("Total", bean_pagos.busquedaMonto(cedula), bean_pagos.busquedaMonto(cedula) * interes_anual / 100, valor_cuota * bean_pagos.busquedaPlazo(cedula), saldo, "", "");
-       // lista_total.add(tot);
-    
-    
- }
  
     public void CalculosPago(){
-         for (Amortizacion amort: amortbusqueda) {
+        
+        for (Amortizacion amort: this.amortbusqueda) {
             if(amort.getEstado().equals("Pendiente")||amort.getEstado().equals("Mora")){
-                taSelected=amort;
-                if(taSelected.getEstado().equals("Mora")){
-                    cargo=6.38;
+                this.taSelected=amort;
+               // this.idAmortizacion=taSelected.getId().intValue();
+                 System.out.println("hi------: " +taSelected.getId().intValue());
+                 PagosBean.idAmortizacion=taSelected.getId().intValue();
+                if(this.taSelected.getEstado().equals("Mora")){
+                    PagosBean.cargo=6.38;
                 }else{
-                    cargo=0;
+                    PagosBean.cargo=0;
                 }
-                total=cargo+taSelected.getValorCuota().doubleValue();
+                PagosBean.total=PagosBean.cargo+this.taSelected.getValorCuota().doubleValue();
                 break;
+            }else{
+                bean_pagos.updateTablaPrestamo(amort.getPreId()+"");
             }
-                       
+                     
         }
         
-    }
-    
-    public void RegistrarPago(){
         
+    }
+   
+        public void regisPago() {
+        
+         boolean inserto;
+         Date fecha = new Date();
+        DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+        calendar.add(Calendar.DAY_OF_YEAR, 3);
+        System.out.println("--------id: "+this.idAmortizacion);
+        this.fechaPago = format.format(calendar.getTime());
+        inserto=bean_pagos.insertarPago(bean_pagos.ExtraerNumPagoPrestamo()+"", idAmortizacion+"", this.fechaPago, this.cargo+"", this.total+"", this.valorRecibido+"");
+        if(inserto==true)
+         FacesUtil.addMessageInfo("Se registro el pago correctamente");
+        
+        bean_pagos.updateTabla(this.idAmortizacion+"");
+        actualizarLimpiar();
         
     }
     
      public void cargarTabla() {
+         cedula1=cedula;
          cli = bean_nuevoPrestamo.verificarCliente(cedula);
          if (cli != null) {
              nombre=bean_pagos.busquedaNombre(cedula);
              amortbusqueda =bean_pagos.busquedaAmortizacion(cedula);
 //             System.out.println(amortbusqueda.get(0).getClass().toString());
+             CalculosPago();
+             
          
         } else {
             FacesUtil.addMessageWarn(null, "El cliente no existe");
             
         }
-        CalculosPago();
         
-//        Total tot = new Total("Total", bean_pagos.busquedaMonto(cedula), bean_pagos.busquedaMonto(cedula) * interes_anual / 100, valor_cuota * bean_pagos.busquedaPlazo(cedula), saldo, "", "");
-       // lista_total.add(tot);
+      
     
-    
+ }
+     
+      public void actualizarLimpiar() {
+         amortbusqueda.clear();
+         cli = bean_nuevoPrestamo.verificarCliente(cedula1);
+         if (cli != null) {
+             nombre=bean_pagos.busquedaNombre(cedula1);
+             amortbusqueda =bean_pagos.busquedaAmortizacion(cedula1);
+//             System.out.println(amortbusqueda.get(0).getClass().toString());
+             CalculosPago();
+             
+         
+        } else {
+            FacesUtil.addMessageWarn(null, "El cliente no existe");
+            
+        }
+        
+
  }
  
  
