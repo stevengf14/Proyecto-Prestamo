@@ -223,13 +223,13 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         EntityManager em1 = factory.createEntityManager();
 
         List<BigDecimal> idList = new ArrayList<BigDecimal>();
-        //try {
-        Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO");
-        idList = q.getResultList();
-        num = idList.get(0).intValue() + 1;
-        //} catch (Exception ex) {
-        //num = 1;
-        //}
+        try {
+            Query q = em1.createNativeQuery("SELECT MAX(ID) FROM PRESTAMO");
+            idList = q.getResultList();
+            num = idList.get(0).intValue() + 1;
+        } catch (Exception ex) {
+            num = 1;
+        }
         em1.close();
         factory.close();
         return num;
@@ -240,7 +240,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         EntityManager em1 = factory.createEntityManager();
         try {
             em1.getTransaction().begin();
-            Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + inte + ", " + valComi + ", " + monFin + ", 500, '" + estado + "')");
+            Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + inte + ", " + valComi + ", " + monFin + ", " + monPres + ", '" + estado + "')");
             q.executeUpdate();
             em1.getTransaction().commit();
         } catch (Exception ex) {

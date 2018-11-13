@@ -2,10 +2,10 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-    <artifactId>Prestamo</artifactId>
-    <groupId>ec.edu.espe.arquitectura</groupId>
-    <version>1</version>
-  </parent>
+        <artifactId>Prestamo</artifactId>
+        <groupId>ec.edu.espe.arquitectura</groupId>
+        <version>1</version>
+    </parent>
 
     <groupId>ec.edu.espe.arquitectura</groupId>
     <artifactId>Prestamo-web</artifactId>
@@ -24,6 +24,12 @@
             <groupId>ec.edu.espe.arquitectura</groupId>
             <artifactId>Prestamo-ejb</artifactId>
             <version>1</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
@@ -39,11 +45,6 @@
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
             <version>6.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.primefaces.themes</groupId>
-            <artifactId>cruze</artifactId>
-            <version>1.0.10</version>
         </dependency>
         <dependency>
             <groupId>javax</groupId>
