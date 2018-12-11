@@ -29,14 +29,12 @@
                         <p:menuitem value="Pagos" outcome="/Vista/PagosPrestamo" icon="ui-icon-check">
                             <f:param name="i" value="2" />
                         </p:menuitem>
-                        <p:menuitem value="Reportes" outcome="/Vista/NuevoPrestamo" icon="ui-icon-document">
+                        
+                        <p:menuitem value="Cerrar Día" action="#{cerrarDiaBean.cerrarDia()}" icon="ui-icon-play">
                             <f:param name="i" value="3" />
                         </p:menuitem>
-                        <p:menuitem value="Cerrar Día" action="#{cerrarDiaBean.cerrarDia()}" icon="ui-icon-play">
-                            <f:param name="i" value="4" />
-                        </p:menuitem>
                         <p:menuitem value="Salir" outcome="/Vista/Usuario_Login" action="#{loginBean.logout()}" icon="ui-icon-close">
-                            <f:param name="i" value="5" />
+                            <f:param name="i" value="4" />
                         </p:menuitem>
                     </p:tabMenu>
                 </h:form>

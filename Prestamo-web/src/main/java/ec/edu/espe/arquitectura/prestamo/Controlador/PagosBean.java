@@ -25,7 +25,6 @@ import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
 
-
 /**
  *
  * @author Samsung-PC
@@ -34,7 +33,6 @@ import javax.faces.bean.ManagedBean;
 @SessionScoped
 public class PagosBean implements Serializable {
 
-    
     @EJB
     PagoPrestamoFacadeLocal bean_pagos;
     @EJB
@@ -45,7 +43,7 @@ public class PagosBean implements Serializable {
     private double monto;
     private int plazo;
     private ArrayList<Total> lista_total = new ArrayList<>();
-    private String nombre="";
+    private String nombre = "";
     private double valorCuota;
     private double xCobrar;
     private double valorRecibido;
@@ -58,6 +56,7 @@ public class PagosBean implements Serializable {
     Amortizacion amorti = new Amortizacion();
     private ArrayList<Tabla_Amortizacion> amortizacion = new ArrayList<Tabla_Amortizacion>();
     private ArrayList<Amortizacion> listAmortiza = new ArrayList<Amortizacion>();
+
     public List<Amortizacion> getListaAmort() {
         return listaAmort;
     }
@@ -85,7 +84,6 @@ public class PagosBean implements Serializable {
     public void setIdAmortizacion(int idAmortizacion) {
         this.idAmortizacion = idAmortizacion;
     }
-    
 
     public void setListaAmort(List<Amortizacion> listaAmort) {
         this.listaAmort = listaAmort;
@@ -103,12 +101,9 @@ public class PagosBean implements Serializable {
         this.listAmortiza = listAmortiza;
     }
 
-    
-    
     public void setAmorti(Amortizacion amorti) {
         this.amorti = amorti;
     }
-    
 
     public double getTotal() {
         return total;
@@ -117,16 +112,15 @@ public class PagosBean implements Serializable {
     public void setTotal(double total) {
         this.total = total;
     }
-    
 
     public List<Amortizacion> getAmortbusqueda() {
         return amortbusqueda;
     }
-    
-    
+
     public void setAmortbusqueda(List<Amortizacion> amortbusqueda) {
         this.amortbusqueda = amortbusqueda;
     }
+
     public double getCargo() {
         return cargo;
     }
@@ -134,8 +128,8 @@ public class PagosBean implements Serializable {
     public void setCargo(double cargo) {
         this.cargo = cargo;
     }
-     Tabla_Amortizacion ta;
-     private Amortizacion taSelected;
+    Tabla_Amortizacion ta;
+    private Amortizacion taSelected;
 
     public Amortizacion getTaSelected() {
         return taSelected;
@@ -145,7 +139,6 @@ public class PagosBean implements Serializable {
         this.taSelected = taSelected;
     }
 
-     
     public Tabla_Amortizacion getTa() {
         return ta;
     }
@@ -211,8 +204,8 @@ public class PagosBean implements Serializable {
     public static void setCedula1(String cedula1) {
         PagosBean.cedula1 = cedula1;
     }
-    
-    Prestamo pres= new Prestamo();
+
+    Prestamo pres = new Prestamo();
 
     public Prestamo getPres() {
         return pres;
@@ -221,7 +214,6 @@ public class PagosBean implements Serializable {
     public void setPres(Prestamo pres) {
         this.pres = pres;
     }
- 
 
     public ArrayList<Tabla_Amortizacion> getAmortizacion() {
         return amortizacion;
@@ -270,8 +262,7 @@ public class PagosBean implements Serializable {
     public void setBean_pagos(PagoPrestamoFacadeLocal bean_pagos) {
         this.bean_pagos = bean_pagos;
     }
-   
-  
+
     public String getCedula() {
         return cedula;
     }
@@ -280,100 +271,86 @@ public class PagosBean implements Serializable {
         this.cedula = cedula;
     }
 
-  
-    
-   
     /**
      * Creates a new instance of PagosBean
      */
     public PagosBean() {
-        
-    }
-  
-   
 
- 
-    public void CalculosPago(){
-        
-        for (Amortizacion amort: this.amortbusqueda) {
-            if(amort.getEstado().equals("Pendiente")||amort.getEstado().equals("Mora")){
-                this.taSelected=amort;
-               // this.idAmortizacion=taSelected.getId().intValue();
-                 System.out.println("hi------: " +taSelected.getId().intValue());
-                 PagosBean.idAmortizacion=taSelected.getId().intValue();
-                if(this.taSelected.getEstado().equals("Mora")){
-                    PagosBean.cargo=6.38;
-                }else{
-                    PagosBean.cargo=0;
-                }
-                PagosBean.total=PagosBean.cargo+this.taSelected.getValorCuota().doubleValue();
-                break;
-            }else{
-                bean_pagos.updateTablaPrestamo(amort.getPreId()+"");
-            }
-                     
-        }
-        
-        
     }
-   
-        public void regisPago() {
-        
-         boolean inserto;
-         Date fecha = new Date();
+
+    public void CalculosPago() {
+
+        for (Amortizacion amort : this.amortbusqueda) {
+            if (amort.getEstado().equals("Pendiente") || amort.getEstado().equals("Mora")) {
+                this.taSelected = amort;
+                // this.idAmortizacion=taSelected.getId().intValue();
+                System.out.println("hi------: " + taSelected.getId().intValue());
+                PagosBean.idAmortizacion = taSelected.getId().intValue();
+                if (this.taSelected.getEstado().equals("Mora")) {
+                    PagosBean.cargo = 6.38;
+                } else {
+                    PagosBean.cargo = 0;
+                }
+                PagosBean.total = PagosBean.cargo + this.taSelected.getValorCuota().doubleValue();
+                break;
+            } else {
+                bean_pagos.updateTablaPrestamo(amort.getPreId() + "");
+            }
+
+        }
+
+    }
+
+    public void regisPago() {
+
+        boolean inserto;
+        Date fecha = new Date();
         DateFormat format = new SimpleDateFormat("dd-MM-yyyy");
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(fecha);
         calendar.add(Calendar.DAY_OF_YEAR, 3);
-        System.out.println("--------id: "+this.idAmortizacion);
+        System.out.println("--------id: " + this.idAmortizacion);
         this.fechaPago = format.format(calendar.getTime());
-        inserto=bean_pagos.insertarPago(bean_pagos.ExtraerNumPagoPrestamo()+"", idAmortizacion+"", this.fechaPago, this.cargo+"", this.total+"", this.valorRecibido+"");
-        if(inserto==true)
-         FacesUtil.addMessageInfo("Se registro el pago correctamente");
-        
-        bean_pagos.updateTabla(this.idAmortizacion+"");
-        actualizarLimpiar();
-        
-    }
-    
-     public void cargarTabla() {
-         cedula1=cedula;
-         cli = bean_nuevoPrestamo.verificarCliente(cedula);
-         if (cli != null) {
-             nombre=bean_pagos.busquedaNombre(cedula);
-             amortbusqueda =bean_pagos.busquedaAmortizacion(cedula);
-//             System.out.println(amortbusqueda.get(0).getClass().toString());
-             CalculosPago();
-             
-         
-        } else {
-            FacesUtil.addMessageWarn(null, "El cliente no existe");
-            
+        inserto = bean_pagos.insertarPago(bean_pagos.ExtraerNumPagoPrestamo() + "", idAmortizacion + "", this.fechaPago, this.cargo + "", this.total + "", this.valorRecibido + "");
+        if (inserto == true) {
+            FacesUtil.addMessageInfo("Se registro el pago correctamente");
         }
-        
-      
-    
- }
-     
-      public void actualizarLimpiar() {
-         amortbusqueda.clear();
-         cli = bean_nuevoPrestamo.verificarCliente(cedula1);
-         if (cli != null) {
-             nombre=bean_pagos.busquedaNombre(cedula1);
-             amortbusqueda =bean_pagos.busquedaAmortizacion(cedula1);
-//             System.out.println(amortbusqueda.get(0).getClass().toString());
-             CalculosPago();
-             
-         
-        } else {
-            FacesUtil.addMessageWarn(null, "El cliente no existe");
-            
-        }
-        
 
- }
- 
- 
-    
-    
+        bean_pagos.updateTabla(this.idAmortizacion + "");
+        actualizarLimpiar();
+
+    }
+
+    public void cargarTabla() {
+        cedula1 = cedula;
+        cli = bean_nuevoPrestamo.verificarCliente(cedula);
+        if (cli != null) {
+            nombre = bean_pagos.busquedaNombre(cedula);
+            amortbusqueda = bean_pagos.busquedaAmortizacion(cedula);
+//             System.out.println(amortbusqueda.get(0).getClass().toString());
+            CalculosPago();
+
+        } else {
+            FacesUtil.addMessageWarn(null, "El cliente no existe");
+
+        }
+
+    }
+
+    public void actualizarLimpiar() {
+        amortbusqueda.clear();
+        cli = bean_nuevoPrestamo.verificarCliente(cedula1);
+        if (cli != null) {
+            nombre = bean_pagos.busquedaNombre(cedula1);
+            amortbusqueda = bean_pagos.busquedaAmortizacion(cedula1);
+//             System.out.println(amortbusqueda.get(0).getClass().toString());
+            CalculosPago();
+
+        } else {
+            FacesUtil.addMessageWarn(null, "El cliente no existe");
+
+        }
+
+    }
+
 }

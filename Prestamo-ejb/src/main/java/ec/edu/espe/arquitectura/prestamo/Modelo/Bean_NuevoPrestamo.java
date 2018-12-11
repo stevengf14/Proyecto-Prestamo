@@ -26,13 +26,14 @@ import javax.persistence.Query;
 @Stateless
 public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
 
+    EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
+    EntityManager em1 = factory.createEntityManager();
+
     public Cliente verificarCliente(String cedula) {
         boolean val = false;
         Cliente cli = new Cliente();
         List<String> cedulaList = new ArrayList<String>();
         List<String> nombre = new ArrayList<String>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q = em1.createNativeQuery("SELECT CEDULA FROM CLIENTE WHERE CEDULA='" + cedula + "'");
             Query q2 = em1.createNativeQuery("SELECT NOMBRE FROM CLIENTE WHERE CEDULA='" + cedula + "'");
@@ -47,8 +48,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             cli = null;
         }
-        em1.close();
-        factory.close();
         return cli;
     }
 
@@ -56,8 +55,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         int id = EncontrarIdPrestamo(TipoPrestamo);
         boolean val = false;
         List<String> tipo_cliente = new ArrayList<String>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q2 = em1.createNativeQuery("SELECT TIPO FROM CLIENTE WHERE CEDULA='" + cedula + "'");
             tipo_cliente = q2.getResultList();
@@ -73,8 +70,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             val = false;
         }
-        em1.close();
-        factory.close();
         return val;
     }
 
@@ -97,8 +92,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         boolean val = false;
         List<BigDecimal> montoMin = new ArrayList<BigDecimal>();
         List<BigDecimal> montoMax = new ArrayList<BigDecimal>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q = em1.createNativeQuery("SELECT MONTO_MINIMO FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             Query q2 = em1.createNativeQuery("SELECT MONTO_MAXIMO FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
@@ -113,8 +106,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             val = true;
         }
-        em1.close();
-        factory.close();
         return val;
     }
 
@@ -123,8 +114,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         String mensaje = "";
         List<Double> montoMin = new ArrayList<Double>();
         List<Double> montoMax = new ArrayList<Double>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q = em1.createNativeQuery("SELECT MONTO_MINIMO FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             Query q2 = em1.createNativeQuery("SELECT MONTO_MAXIMO FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
@@ -134,8 +123,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             mensaje = "";
         }
-        em1.close();
-        factory.close();
         return mensaje;
     }
 
@@ -144,8 +131,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         boolean val = false;
         List<BigDecimal> plazoMin = new ArrayList<BigDecimal>();
         List<BigDecimal> plazoMax = new ArrayList<BigDecimal>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q = em1.createNativeQuery("SELECT PLAZO_MIN FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             Query q2 = em1.createNativeQuery("SELECT PLAZO_MAX FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
@@ -160,8 +145,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             val = true;
         }
-        em1.close();
-        factory.close();
         return val;
     }
 
@@ -170,8 +153,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         String mensaje = "";
         List<BigDecimal> plazoMin = new ArrayList<BigDecimal>();
         List<BigDecimal> plazoMax = new ArrayList<BigDecimal>();
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
             Query q = em1.createNativeQuery("SELECT PLAZO_MIN FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
             Query q2 = em1.createNativeQuery("SELECT PLAZO_MAX FROM TIPO_PRODUCTO WHERE ID='" + id + "'");
@@ -181,8 +162,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             mensaje = "";
         }
-        em1.close();
-        factory.close();
         return mensaje;
     }
 
@@ -219,8 +198,6 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
 
     public int ExtraerNumPrestamo() {
         int num;
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
 
         List<BigDecimal> idList = new ArrayList<BigDecimal>();
         try {
@@ -230,48 +207,33 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             num = 1;
         }
-        em1.close();
-        factory.close();
         return num;
     }
 
     public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String estado) {
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
-            em1.getTransaction().begin();
+            em1.joinTransaction();
             Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + inte + ", " + valComi + ", " + monFin + ", " + monPres + ", '" + estado + "')");
             q.executeUpdate();
-            em1.getTransaction().commit();
         } catch (Exception ex) {
-            em1.getTransaction().rollback();
         }
-        em1.close();
-        factory.close();
     }
 
     public int EncontrarClienteId(String cedula) {
         int num;
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
-
         List<BigDecimal> idList = new ArrayList<BigDecimal>();
         try {
             Query q = em1.createNativeQuery("SELECT ID FROM CLIENTE WHERE CEDULA='" + cedula + "'");
             idList = q.getResultList();
-            num = idList.get(0).intValue() + 1;
+            num = idList.get(0).intValue();
         } catch (Exception ex) {
             num = 1;
         }
-        em1.close();
-        factory.close();
         return num;
     }
 
     public int ExtraerNumAmortizacion() {
         int num;
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         List<BigDecimal> idList = new ArrayList<BigDecimal>();
         try {
             Query q = em1.createNativeQuery("SELECT MAX(ID) FROM AMORTIZACION");
@@ -280,18 +242,14 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         } catch (Exception ex) {
             num = 1;
         }
-        em1.close();
-        factory.close();
         return num;
     }
 
     public boolean InsertarAmortizacion(int pre_id, double capital, double interes, double valor_cuota, String fecha, String estado, int numero, double saldo) {
         int id = ExtraerNumAmortizacion();
         boolean val = false;
-        EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
-        EntityManager em1 = factory.createEntityManager();
         try {
-            em1.getTransaction().begin();
+            em1.joinTransaction();
             Query q = em1.createNativeQuery("INSERT INTO AMORTIZACION VALUES(" + id + "," + pre_id + "," + capital + "," + interes + "," + valor_cuota + ",'" + fecha + "','" + estado + "'," + numero + "," + saldo + ")");
             int num = q.executeUpdate();
             if (num < 0) {
@@ -299,13 +257,9 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
             } else {
                 val = false;
             }
-            em1.getTransaction().commit();
         } catch (Exception ex) {
             val = false;
-            em1.getTransaction().rollback();
         }
-        em1.close();
-        factory.close();
         return val;
     }
 }

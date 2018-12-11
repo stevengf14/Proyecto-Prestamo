@@ -21,6 +21,7 @@ public class CerrarDiaBean {
     
     @EJB
     BeanCerrarDiaLocal beanCerrarDia;
+    
     public CerrarDiaBean() {
     }
     
