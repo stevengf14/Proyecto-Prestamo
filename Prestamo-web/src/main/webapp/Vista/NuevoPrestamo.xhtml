@@ -12,7 +12,9 @@
         <ui:composition template="./../Templates/plantillaPaginas.xhtml">
 
             <ui:define name="content">
+
                 <h:form>
+
                     <!--<p:growl id="growl" sticky="true" showDetail="true"/>--> 
                     <p:wizard flowListener="#{nuevoPrestamoBean.onFlowProcess}">
                         <p:tab id="prestamo" title="Personal">
@@ -24,10 +26,7 @@
 
                                     <p:outputLabel for="tipo_credito" value="Tipo de Crédito: " />
                                     <p:selectOneMenu id="tipo_credito" value="#{nuevoPrestamoBean.tipo}" style="width:125px">
-                                        <f:selectItem itemLabel="Quirografario" itemValue="Quirografario" />
-                                        <f:selectItem itemLabel="Hipotecario" itemValue="Hipotecario" />
-                                        <f:selectItem itemLabel="Vehicular" itemValue="Vehicular" />
-                                        <f:selectItem itemLabel="Comercial" itemValue="Comercial" />
+                                        <f:selectItems value="#{nuevoPrestamoBean.tipo_prestamo}" />
                                     </p:selectOneMenu>
 
                                     <p:outputLabel for="monto" value="Monto: " />
@@ -38,11 +37,11 @@
                                         <f:convertNumber integerOnly="true" type="number"/>
                                     </p:inputText>
                                 </p:panelGrid>
-                                
+
                             </p:panel>
                             <p:messages globalOnly="true" showDetail="true" severity="warn" />
                         </p:tab>
-                        
+
                         <p:tab id="detalle" title="Detalle Préstamo">
                             <p:panel id="Datos" header="Datos del Préstamo" >
                                 <p:panelGrid  class="ui-noborder" columns="4" >
@@ -176,7 +175,7 @@
                                     <p:outputLabel for="cuotasMensuales" value="Cuotas Mensuales ($):" />
                                     <p:outputLabel id='cuotasMensuales' value="#{nuevoPrestamoBean.coutas}" />
                                 </p:panelGrid>
-                               <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" update="@form" >
+                                <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoPrestamoBean.guardarPrestamo()}" update="@form" >
                                     <p:confirm header="Confirmación" message="Desea guardar el préstamo?" icon="pi pi-exclamation-triangle" />
                                 </p:commandButton>
                                 <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
@@ -191,8 +190,8 @@
 
             </ui:define>
 
-<!--            <ui:define name="bottom">
-            </ui:define>-->
+            <!--            <ui:define name="bottom">
+                        </ui:define>-->
 
         </ui:composition>
 
