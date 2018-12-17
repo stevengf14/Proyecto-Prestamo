@@ -17,7 +17,9 @@ import javax.ejb.Local;
 public interface Bean_NuevoPrestamoLocal {
 
     public Cliente verificarCliente(String cedula);
-
+    
+    public boolean verificarPrestamoPorCliente(String cedula);
+    
     public boolean verificarTipoPrestamoCliente(String cedula, String TipoPrestamo);
 
     public int EncontrarIdPrestamo(String TipoPrestamo);
@@ -43,4 +45,6 @@ public interface Bean_NuevoPrestamoLocal {
     public int ExtraerNumAmortizacion();
 
     public boolean InsertarAmortizacion(int pre_id, double capital, double interes, double valor_cuota, String fecha, String estado, int numero, double saldo);
+    
+    public List<String> cargarListaPrestamos();
 }

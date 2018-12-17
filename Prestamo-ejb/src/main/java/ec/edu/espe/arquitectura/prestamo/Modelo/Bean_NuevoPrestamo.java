@@ -51,6 +51,26 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         return cli;
     }
 
+    public boolean verificarPrestamoPorCliente(String cedula) {
+        boolean val = false;
+        List<String> cedulaList = new ArrayList<String>();
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
+        try {
+            Query q = em1.createNativeQuery("SELECT ID FROM CLIENTE WHERE CEDULA='" + cedula + "'");
+            idList = q.getResultList();
+            Query q1 = em1.createNativeQuery("SELECT CLI_ID FROM PRESTAMO WHERE CLI_ID='" + idList.get(0) + "' AND ESTADO='act'");
+            cedulaList = q1.getResultList();
+            if (cedulaList.size() >= 1) {
+                val = false;
+            } else {
+                val = true;
+            }
+        } catch (Exception ex) {
+            val = false;
+        }
+        return val;
+    }
+
     public boolean verificarTipoPrestamoCliente(String cedula, String TipoPrestamo) {
         int id = EncontrarIdPrestamo(TipoPrestamo);
         boolean val = false;
@@ -75,7 +95,15 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
 
     public int EncontrarIdPrestamo(String TipoPrestamo) {
         int id = 0;
-        if (TipoPrestamo.equals("Quirografario")) {
+        List<BigDecimal> idList = new ArrayList<BigDecimal>();
+        try {
+            Query q = em1.createNativeQuery("SELECT PRO_ID FROM PRODUCTO WHERE PRO_DESCRIPCION='" + TipoPrestamo + "'");
+            idList = q.getResultList();
+            id = idList.get(0).intValue();
+        } catch (Exception ex) {
+            //num = 1;
+        }
+        /*if (TipoPrestamo.equals("Quirografario")) {
             id = 1;
         } else if (TipoPrestamo.equals("Hipotecario")) {
             id = 2;
@@ -83,7 +111,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
             id = 3;
         } else if (TipoPrestamo.equals("Comercial")) {
             id = 4;
-        }
+        }*/
         return id;
     }
 
@@ -261,5 +289,12 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
             val = false;
         }
         return val;
+    }
+
+    public List<String> cargarListaPrestamos() {
+        List<String> lista = new ArrayList<String>();
+        Query q = em1.createNativeQuery("SELECT PRO_DESCRIPCION FROM PRODUCTO WHERE PRO_ESTADO='Activo'");
+        lista = q.getResultList();
+        return lista;
     }
 }

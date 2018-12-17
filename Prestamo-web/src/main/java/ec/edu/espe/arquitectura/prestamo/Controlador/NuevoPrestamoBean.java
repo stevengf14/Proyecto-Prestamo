@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
@@ -56,10 +57,25 @@ public class NuevoPrestamoBean implements Serializable {
     private int numPrestamo;
     private boolean prestamo;
     private boolean detallePrestamo;
+    private List<String> tipo_prestamo;
+
     @EJB
     Bean_NuevoPrestamoLocal bean_nuevoPrestamo;
 
     Cliente cli = new Cliente();
+
+    @PostConstruct
+    public void init() {
+        cargarPrestamo();
+    }
+
+    public List<String> getTipo_prestamo() {
+        return tipo_prestamo;
+    }
+
+    public void setTipo_prestamo(List<String> tipo_prestamo) {
+        this.tipo_prestamo = tipo_prestamo;
+    }
 
     public ArrayList<Total> getLista_total() {
         return lista_total;
@@ -210,21 +226,30 @@ public class NuevoPrestamoBean implements Serializable {
         this.detallePrestamo = detallePrestamo;
     }
 
+    public void cargarPrestamo() {
+        tipo_prestamo = bean_nuevoPrestamo.cargarListaPrestamos();
+    }
+
     public boolean aceptar() {
         cli = bean_nuevoPrestamo.verificarCliente(cedula);
         amortizacion.clear();
         if (cli != null) {
             if (bean_nuevoPrestamo.verificarTipoPrestamoCliente(cedula, tipo)) {
-                if (bean_nuevoPrestamo.validarMonto(tipo, monto)) {
-                    if (bean_nuevoPrestamo.validarPlazo(tipo, plazo)) {
-                        CargarTabla();
-                        return true;
+                if (bean_nuevoPrestamo.verificarPrestamoPorCliente(cedula)) {
+                    if (bean_nuevoPrestamo.validarMonto(tipo, monto)) {
+                        if (bean_nuevoPrestamo.validarPlazo(tipo, plazo)) {
+                            CargarTabla();
+                            return true;
+                        } else {
+                            FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajePlazo(tipo));
+                            return false;
+                        }
                     } else {
-                        FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajePlazo(tipo));
+                        FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajeMonto(tipo));
                         return false;
                     }
                 } else {
-                    FacesUtil.addMessageWarn(null, bean_nuevoPrestamo.mensajeMonto(tipo));
+                    FacesUtil.addMessageWarn(null, "El cliente ya cuenta con un Préstamo, no puede solicitar un préstamo en este momento");
                     return false;
                 }
             } else {
@@ -310,7 +335,7 @@ public class NuevoPrestamoBean implements Serializable {
     public String onFlowProcess(FlowEvent event) {
         if (event.getNewStep().equals("detalle")) {
             if (aceptar()) {
-                
+
                 return event.getNewStep();
             } else {
                 //FacesUtil.addMessageWarn(null, "Los clientes jurídicos pueden acceder únicamente a préstamos comerciales");
