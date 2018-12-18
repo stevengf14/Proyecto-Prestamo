@@ -8,8 +8,8 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,7 +31,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Samsung-PC
+ * @author Steven
  */
 @Entity
 @Table(name = "PRESTAMO")
@@ -97,14 +98,18 @@ public class Prestamo implements Serializable {
     @Size(min = 1, max = 3)
     @Column(name = "ESTADO")
     private String estado;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preId")
-    private Collection<Amortizacion> amortizacionCollection;
     @JoinColumn(name = "CLI_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Cliente cliId;
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID")
     @ManyToOne(optional = false)
     private Producto proId;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "prestamo")
+    private Accrual accrual;
+    @OneToMany(mappedBy = "preId")
+    private List<Cargo> cargoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preId")
+    private List<Amortizacion> amortizacionList;
 
     public Prestamo() {
     }
@@ -213,15 +218,6 @@ public class Prestamo implements Serializable {
         this.estado = estado;
     }
 
-    @XmlTransient
-    public Collection<Amortizacion> getAmortizacionCollection() {
-        return amortizacionCollection;
-    }
-
-    public void setAmortizacionCollection(Collection<Amortizacion> amortizacionCollection) {
-        this.amortizacionCollection = amortizacionCollection;
-    }
-
     public Cliente getCliId() {
         return cliId;
     }
@@ -236,6 +232,32 @@ public class Prestamo implements Serializable {
 
     public void setProId(Producto proId) {
         this.proId = proId;
+    }
+
+    public Accrual getAccrual() {
+        return accrual;
+    }
+
+    public void setAccrual(Accrual accrual) {
+        this.accrual = accrual;
+    }
+
+    @XmlTransient
+    public List<Cargo> getCargoList() {
+        return cargoList;
+    }
+
+    public void setCargoList(List<Cargo> cargoList) {
+        this.cargoList = cargoList;
+    }
+
+    @XmlTransient
+    public List<Amortizacion> getAmortizacionList() {
+        return amortizacionList;
+    }
+
+    public void setAmortizacionList(List<Amortizacion> amortizacionList) {
+        this.amortizacionList = amortizacionList;
     }
 
     @Override

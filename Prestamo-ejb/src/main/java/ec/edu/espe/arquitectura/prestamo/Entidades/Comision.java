@@ -7,16 +7,20 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -49,6 +53,8 @@ public class Comision implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "ESTADO")
     private String estado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "comId")
+    private List<ProductoComision> productoComisionList;
 
     public Comision() {
     }
@@ -85,6 +91,15 @@ public class Comision implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    @XmlTransient
+    public List<ProductoComision> getProductoComisionList() {
+        return productoComisionList;
+    }
+
+    public void setProductoComisionList(List<ProductoComision> productoComisionList) {
+        this.productoComisionList = productoComisionList;
     }
 
     @Override

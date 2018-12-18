@@ -1,0 +1,71 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+    <body>
+        <ui:composition template="./../Templates/plantillaPaginas.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:tab id="actualizar" title="Modificación del Producto">
+                        <p:panel id="actualizarPrestamo" header="Actualización Datos de Préstamo">
+                            <p:panelGrid  id="modificar" class="ui-noborder" columns="2">
+                                <p:outputLabel for="tipoPrestamo_m" value="Tipo de Préstamo: " />
+                                <p:selectOneMenu id="tipoPrestamo_m" value="#{nuevoProductoBean.tipo_m}" style="width:125px">
+                                    <f:selectItems value="#{nuevoProductoBean.listaTipoPrestamo}" />
+                                    <p:ajax event="itemSelect" listener="#{nuevoProductoBean.extraerCampos()}" update="descripcionPrestamo_m estadoPrestamo_m montoMinimo_m montoMaximo_m tipoCliente_m tasaInteres_m plazoMin_m plazoMax_m" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="descripcionPrestamo_m" value="Descripción del Préstamo:" />
+                                <p:inputText id='descripcionPrestamo_m' value="#{nuevoProductoBean.descripcion_m}" />
+
+                                <p:outputLabel for="estadoPrestamo_m" value="Estado:" />
+                                <p:selectOneMenu id="estadoPrestamo_m" value="#{nuevoProductoBean.estado_m}" style="width:125px">
+                                    <f:selectItem itemLabel="Activo" itemValue="Activo" />
+                                    <f:selectItem itemLabel="Inactivo" itemValue="Inactivo" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="montoMinimo_m" value="Monto Mínimo:" />
+                                <p:inputNumber id='montoMinimo_m' required="true" value="#{nuevoProductoBean.montoMin_m}" />
+
+                                <p:outputLabel for="montoMaximo_m" value="Monto Máximo:" />
+                                <p:inputNumber id='montoMaximo_m' required="true" value="#{nuevoProductoBean.montoMax_m}" />
+
+                                <p:outputLabel for="tipoCliente_m" value="Tipo de Cliente:" />
+                                <p:selectOneMenu id="tipoCliente_m" value="#{nuevoProductoBean.tipoCliente_m}" style="width:125px">
+                                    <f:selectItem itemLabel="Natural" itemValue="Natural" />
+                                    <f:selectItem itemLabel="Juridico" itemValue="Juridico" />
+                                </p:selectOneMenu>
+
+                                <p:outputLabel for="tasaInteres_m" value="Tasa de interés anual:" />
+                                <p:inputNumber id='tasaInteres_m' value="#{nuevoProductoBean.interes_m}"/>
+
+                                <p:outputLabel for="plazoMin_m" value="Plazo mínimo de pago:" />
+                                <p:inputText id="plazoMin_m" required="true" value="#{nuevoProductoBean.plazoMin_m}" maxlength="3">
+                                    <f:convertNumber integerOnly="true" type="number" />
+                                </p:inputText>
+
+                                <p:outputLabel for="plazoMax_m" value="Plazo máximo de pago:" />
+                                <p:inputText id="plazoMax_m" required="true" value="#{nuevoProductoBean.plazoMax_m}" maxlength="3">
+                                    <f:convertNumber integerOnly="true" type="number" />
+                                </p:inputText>
+                            </p:panelGrid>
+                            <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoProductoBean.actualizarProductos()}" update="@form" >
+                                <p:confirm header="Confirmación" message="Desea guardar el producto?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                            <p:confirmDialog id="conf1" global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"  action="#{nuevoProductoBean.actualizarProductos()}" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                            </p:confirmDialog>
+                        </p:panel>
+
+                    </p:tab>
+
+                </h:form>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

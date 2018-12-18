@@ -58,7 +58,16 @@ public class NuevoPrestamoBean implements Serializable {
     private boolean prestamo;
     private boolean detallePrestamo;
     private List<String> tipo_prestamo;
+    private double interes_prestamo;
 
+    public double getInteres_prestamo() {
+        return interes_prestamo;
+    }
+
+    public void setInteres_prestamo(double interes_prestamo) {
+        this.interes_prestamo = interes_prestamo;
+    }
+    
     @EJB
     Bean_NuevoPrestamoLocal bean_nuevoPrestamo;
 
@@ -68,6 +77,8 @@ public class NuevoPrestamoBean implements Serializable {
     public void init() {
         cargarPrestamo();
     }
+
+    
 
     public List<String> getTipo_prestamo() {
         return tipo_prestamo;
@@ -270,7 +281,8 @@ public class NuevoPrestamoBean implements Serializable {
     public void CargarTabla() {
         lista_total.clear();
         Tabla_Amortizacion ta;
-        double interes_anual = 16.06;
+        interes_prestamo=bean_nuevoPrestamo.encontrarInteres(tipo);
+        double interes_anual = interes_prestamo;
         double interes_mensual = interes_anual / 12 / 100;
         double interes = 0;
         double valor_cuota = monto * (interes_mensual * Math.pow(1 + interes_mensual, plazo)) / (Math.pow(interes_mensual + 1, plazo) - 1);
@@ -282,7 +294,7 @@ public class NuevoPrestamoBean implements Serializable {
             if (i == 0) {
                 ta = new Tabla_Amortizacion(i, 0, 0, 0, bean_nuevoPrestamo.Convertir(saldo), lista_fecha.get(i), "");
             } else {
-                interes = saldo * ((16.06 / 12) / 100);
+                interes = saldo * ((interes_prestamo / 12) / 100);
                 capital = valor_cuota - interes;
                 saldo = saldo - capital;
                 ta = new Tabla_Amortizacion(i, bean_nuevoPrestamo.Convertir(capital), bean_nuevoPrestamo.Convertir(interes), bean_nuevoPrestamo.Convertir(capital + interes), bean_nuevoPrestamo.Convertir(saldo), lista_fecha.get(i), "Pendiente");
@@ -325,7 +337,7 @@ public class NuevoPrestamoBean implements Serializable {
 
     public String guardarPrestamo() {
         System.out.println("datos: " + numPrestamo + ", " + fechaConcesion + "," + monto);
-        bean_nuevoPrestamo.insertarPrestamo(numPrestamo + "", bean_nuevoPrestamo.EncontrarClienteId(cedula) + "", bean_nuevoPrestamo.EncontrarIdPrestamo(tipo) + "", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", "16.06", "0.15", this.montoFinal + "", "act");
+        bean_nuevoPrestamo.insertarPrestamo(numPrestamo + "", bean_nuevoPrestamo.EncontrarClienteId(cedula) + "", bean_nuevoPrestamo.EncontrarIdPrestamo(tipo) + "", this.fechaCreacion, this.fechaConcesion, this.fechaDesembolso, this.monto + "", this.plazo + "", tipo, "0.15", this.montoFinal + "", "act");
         for (int i = 1; i < amortizacion.size(); i++) {
             bean_nuevoPrestamo.InsertarAmortizacion(numPrestamo, amortizacion.get(i).getCapital(), amortizacion.get(i).getInteres(), amortizacion.get(i).getValor_cuota(), amortizacion.get(i).getFecha_amortizacion(), amortizacion.get(i).getEstado(), amortizacion.get(i).getNumero(), amortizacion.get(i).getCapital());
         }
@@ -348,16 +360,5 @@ public class NuevoPrestamoBean implements Serializable {
         } else {
             return event.getNewStep();
         }
-//        if (prestamo) {
-////            prestamo = false;   //reset in case user goes back
-//            aceptar();
-//            return "detalle";
-//        } else if (detalle) {
-//            System.out.println(this.amortizacion.size());
-//            calculosConfirmacion();
-//            return  "confirmacion";
-//        } else {
-//            return event.getNewStep();
-//        }
     }
 }

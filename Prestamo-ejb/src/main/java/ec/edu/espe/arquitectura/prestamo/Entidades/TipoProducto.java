@@ -8,7 +8,7 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Samsung-PC
+ * @author Steven
  */
 @Entity
 @Table(name = "TIPO_PRODUCTO")
@@ -61,7 +61,7 @@ public class TipoProducto implements Serializable {
     @Column(name = "PLAZO_MIN")
     private BigInteger plazoMin;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tipId")
-    private Collection<Producto> productoCollection;
+    private List<Producto> productoList;
 
     public TipoProducto() {
     }
@@ -124,12 +124,12 @@ public class TipoProducto implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Producto> getProductoCollection() {
-        return productoCollection;
+    public List<Producto> getProductoList() {
+        return productoList;
     }
 
-    public void setProductoCollection(Collection<Producto> productoCollection) {
-        this.productoCollection = productoCollection;
+    public void setProductoList(List<Producto> productoList) {
+        this.productoList = productoList;
     }
 
     @Override
