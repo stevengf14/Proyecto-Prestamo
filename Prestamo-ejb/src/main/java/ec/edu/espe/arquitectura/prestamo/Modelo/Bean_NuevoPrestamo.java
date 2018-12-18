@@ -75,13 +75,16 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         int id = EncontrarIdPrestamo(TipoPrestamo);
         boolean val = false;
         List<String> tipo_cliente = new ArrayList<String>();
+        List<String> tipo_prestamo = new ArrayList<String>();
         try {
+            Query q = em1.createNativeQuery("SELECT PRO_TIPO_CLIENTE FROM PRODUCTO WHERE PRO_DESCRIPCION='" + TipoPrestamo + "'");
+            tipo_prestamo = q.getResultList();
             Query q2 = em1.createNativeQuery("SELECT TIPO FROM CLIENTE WHERE CEDULA='" + cedula + "'");
             tipo_cliente = q2.getResultList();
 
-            if (tipo_cliente.get(0).equals("Juridico") && id != 4) {
+            if (tipo_cliente.get(0).equals("Juridico") && tipo_prestamo.get(0).equals("Natural")) {
                 val = false;
-            } else if (tipo_cliente.get(0).equals("Natural") && id == 4) {
+            } else if (tipo_cliente.get(0).equals("Natural") && tipo_prestamo.get(0).equals("Juridico")) {
                 val = false;
             } else {
                 val = true;
@@ -238,13 +241,21 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         return num;
     }
 
+    public double encontrarInteres(String tiPre) {
+        double interes = 0;
+        List<BigDecimal> lista = new ArrayList<BigDecimal>();
+        Query q = em1.createNativeQuery("SELECT PRO_INTERES FROM PRODUCTO WHERE PRO_DESCRIPCION='" + tiPre + "'");
+        lista = q.getResultList();
+        interes = lista.get(0).doubleValue();
+        return interes;
+    }
+
     public void insertarPrestamo(String id, String cli, String tiPre, String fecCre, String fecCon, String fecDese, String monPres, String pla, String inte, String valComi, String monFin, String estado) {
-        try {
-            em1.joinTransaction();
-            Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + inte + ", " + valComi + ", " + monFin + ", " + monPres + ", '" + estado + "')");
-            q.executeUpdate();
-        } catch (Exception ex) {
-        }
+        double interes = encontrarInteres(inte);
+
+        em1.joinTransaction();
+        Query q = em1.createNativeQuery("INSERT INTO PRESTAMO VALUES (" + id + "," + cli + "," + tiPre + ", '" + fecCre + "', '" + fecCon + "', '" + fecDese + "', " + monPres + ", " + pla + ", " + String.valueOf(interes) + ", " + valComi + ", " + monFin + ", " + monPres + ", '" + estado + "')");
+        q.executeUpdate();
     }
 
     public int EncontrarClienteId(String cedula) {

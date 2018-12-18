@@ -7,7 +7,7 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,7 +24,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Samsung-PC
+ * @author Steven
  */
 @Entity
 @Table(name = "CLIENTE")
@@ -64,7 +64,7 @@ public class Cliente implements Serializable {
     @Column(name = "RAZON_SOCIAL")
     private String razonSocial;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "cliId")
-    private Collection<Prestamo> prestamoCollection;
+    private List<Prestamo> prestamoList;
 
     public Cliente() {
     }
@@ -121,12 +121,12 @@ public class Cliente implements Serializable {
     }
 
     @XmlTransient
-    public Collection<Prestamo> getPrestamoCollection() {
-        return prestamoCollection;
+    public List<Prestamo> getPrestamoList() {
+        return prestamoList;
     }
 
-    public void setPrestamoCollection(Collection<Prestamo> prestamoCollection) {
-        this.prestamoCollection = prestamoCollection;
+    public void setPrestamoList(List<Prestamo> prestamoList) {
+        this.prestamoList = prestamoList;
     }
 
     @Override

@@ -90,13 +90,27 @@ public class BeanCerrarDia implements BeanCerrarDiaLocal {
             listAmortizacion.clear();
         }
     }
-
+    public double encontrar_interes(int id)
+    {
+        double interes=0;
+        List<BigDecimal> lista = new ArrayList<BigDecimal>();
+        try {
+            Query q = em1.createNativeQuery("SELECT INTERES FROM PRESTAMO WHERE ID='"+id+"'");
+            lista = q.getResultList();
+            interes=lista.get(0).doubleValue();
+        } catch (Exception ex) {
+            
+        }
+        return interes;
+    }
+    
     public void CerrarDia() {
         ActualizarAmortizacion();
         List<BigDecimal> listaPrestamos = recorrerPrestamosActivos();
         List<BigDecimal> listaAmortizacionMora = new ArrayList<BigDecimal>();
         List<BigDecimal> listaCargoInsertar = new ArrayList<BigDecimal>();
         List<BigDecimal> listaCargoActualizar = new ArrayList<BigDecimal>();
+        
         long diasMora = 0;
         double saldo = 0;
         double interes = 0;
@@ -108,12 +122,14 @@ public class BeanCerrarDia implements BeanCerrarDiaLocal {
             listaAmortizacionMora = recorrerAmortizacionMora(listaPrestamos.get(i).intValue());
             for (int j = 0; j < listaAmortizacionMora.size(); j++) {
                 try {
+                    double prestamo_interes=0;
+                    prestamo_interes=encontrar_interes(listaPrestamos.get(i).intValue());
                     listaFechas = extraerFechas(listaAmortizacionMora.get(j).intValue());
                     diasMora = (-1) * DiferenciaFechas(listaFechas.get(0));
                     Query q1 = em1.createNativeQuery("SELECT SALDO FROM AMORTIZACION WHERE ID=" + listaAmortizacionMora.get(j) + "");
                     listaSaldo = q1.getResultList();
                     saldo = listaSaldo.get(0).doubleValue();
-                    interes = saldo * (16.06 / 100) / 360 * diasMora;
+                    interes = saldo * (prestamo_interes / 100) / 360 * diasMora;
                     if (diasMora <= 15) {
                         valor_mora = saldo * (5 / 100) / 360 * diasMora;
                     } else if (diasMora > 15 && diasMora <= 30) {

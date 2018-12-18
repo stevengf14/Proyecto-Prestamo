@@ -7,7 +7,7 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Collection;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author Samsung-PC
+ * @author Steven
  */
 @Entity
 @Table(name = "PRODUCTO")
@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "Producto.findByProId", query = "SELECT p FROM Producto p WHERE p.proId = :proId")
     , @NamedQuery(name = "Producto.findByProDescripcion", query = "SELECT p FROM Producto p WHERE p.proDescripcion = :proDescripcion")
     , @NamedQuery(name = "Producto.findByProEstado", query = "SELECT p FROM Producto p WHERE p.proEstado = :proEstado")
-    , @NamedQuery(name = "Producto.findByProInteres", query = "SELECT p FROM Producto p WHERE p.proInteres = :proInteres")})
+    , @NamedQuery(name = "Producto.findByProInteres", query = "SELECT p FROM Producto p WHERE p.proInteres = :proInteres")
+    , @NamedQuery(name = "Producto.findByProTipoCliente", query = "SELECT p FROM Producto p WHERE p.proTipoCliente = :proTipoCliente")})
 public class Producto implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -60,11 +61,16 @@ public class Producto implements Serializable {
     @NotNull
     @Column(name = "PRO_INTERES")
     private BigDecimal proInteres;
+    @Size(max = 100)
+    @Column(name = "PRO_TIPO_CLIENTE")
+    private String proTipoCliente;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId")
+    private List<Prestamo> prestamoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId")
+    private List<ProductoComision> productoComisionList;
     @JoinColumn(name = "TIP_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private TipoProducto tipId;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proId")
-    private Collection<Prestamo> prestamoCollection;
 
     public Producto() {
     }
@@ -112,21 +118,38 @@ public class Producto implements Serializable {
         this.proInteres = proInteres;
     }
 
+    public String getProTipoCliente() {
+        return proTipoCliente;
+    }
+
+    public void setProTipoCliente(String proTipoCliente) {
+        this.proTipoCliente = proTipoCliente;
+    }
+
+    @XmlTransient
+    public List<Prestamo> getPrestamoList() {
+        return prestamoList;
+    }
+
+    public void setPrestamoList(List<Prestamo> prestamoList) {
+        this.prestamoList = prestamoList;
+    }
+
+    @XmlTransient
+    public List<ProductoComision> getProductoComisionList() {
+        return productoComisionList;
+    }
+
+    public void setProductoComisionList(List<ProductoComision> productoComisionList) {
+        this.productoComisionList = productoComisionList;
+    }
+
     public TipoProducto getTipId() {
         return tipId;
     }
 
     public void setTipId(TipoProducto tipId) {
         this.tipId = tipId;
-    }
-
-    @XmlTransient
-    public Collection<Prestamo> getPrestamoCollection() {
-        return prestamoCollection;
-    }
-
-    public void setPrestamoCollection(Collection<Prestamo> prestamoCollection) {
-        this.prestamoCollection = prestamoCollection;
     }
 
     @Override

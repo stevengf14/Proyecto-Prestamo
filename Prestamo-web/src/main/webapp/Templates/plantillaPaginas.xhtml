@@ -19,24 +19,29 @@
             <ui:insert name="top"></ui:insert>
             <div id="Menu">
                 <h:form>
-                    <p:tabMenu activeIndex="#{param.i}">
+                    <p:menubar>
                         <p:menuitem value="Inicio" outcome="/Vista/Inicio" icon="ui-icon-home">
                             <f:param name="i" value="0" />
                         </p:menuitem>
+                         
+                            <p:submenu label="Configuración Préstamo" icon="pi pi-pencil">
+                                <p:menuitem value="Nuevo Préstamo" outcome="/Vista/nuevoProducto" icon="pi pi-angle-double-left" />
+                                <p:menuitem value="Modificar Préstamo" outcome="/Vista/modificarProducto" icon="pi pi-angle-double-right" />
+                            </p:submenu>
                         <p:menuitem value="Nuevo Crédito" outcome="/Vista/NuevoPrestamo" icon="ui-icon-folder-open">
-                            <f:param name="i" value="1" />
-                        </p:menuitem>
-                        <p:menuitem value="Pagos" outcome="/Vista/PagosPrestamo" icon="ui-icon-check">
                             <f:param name="i" value="2" />
                         </p:menuitem>
-                        
-                        <p:menuitem value="Cerrar Día" action="#{cerrarDiaBean.cerrarDia()}" icon="ui-icon-play">
+                        <p:menuitem value="Pagos" outcome="/Vista/PagosPrestamo" icon="ui-icon-check">
                             <f:param name="i" value="3" />
                         </p:menuitem>
-                        <p:menuitem value="Salir" outcome="/Vista/Usuario_Login" action="#{loginBean.logout()}" icon="ui-icon-close">
+
+                        <p:menuitem value="Cerrar Día" action="#{cerrarDiaBean.cerrarDia()}" icon="ui-icon-play">
                             <f:param name="i" value="4" />
                         </p:menuitem>
-                    </p:tabMenu>
+                        <p:menuitem value="Salir" outcome="/Vista/Usuario_Login" action="#{loginBean.logout()}" icon="ui-icon-close">
+                            <f:param name="i" value="5" />
+                        </p:menuitem>
+                    </p:menubar>
                 </h:form>
             </div>
 

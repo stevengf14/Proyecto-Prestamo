@@ -9,7 +9,9 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -17,12 +19,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -76,6 +80,10 @@ public class Amortizacion implements Serializable {
     private BigInteger numero;
     @Column(name = "SALDO")
     private BigDecimal saldo;
+    @OneToMany(mappedBy = "amoId")
+    private List<Cargo> cargoList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "amoId")
+    private List<PagoPrestamo> pagoPrestamoList;
     @JoinColumn(name = "PRE_ID", referencedColumnName = "ID")
     @ManyToOne(optional = false)
     private Prestamo preId;
@@ -158,6 +166,24 @@ public class Amortizacion implements Serializable {
 
     public void setSaldo(BigDecimal saldo) {
         this.saldo = saldo;
+    }
+
+    @XmlTransient
+    public List<Cargo> getCargoList() {
+        return cargoList;
+    }
+
+    public void setCargoList(List<Cargo> cargoList) {
+        this.cargoList = cargoList;
+    }
+
+    @XmlTransient
+    public List<PagoPrestamo> getPagoPrestamoList() {
+        return pagoPrestamoList;
+    }
+
+    public void setPagoPrestamoList(List<PagoPrestamo> pagoPrestamoList) {
+        this.pagoPrestamoList = pagoPrestamoList;
     }
 
     public Prestamo getPreId() {

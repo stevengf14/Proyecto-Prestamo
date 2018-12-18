@@ -47,4 +47,6 @@ public interface Bean_NuevoPrestamoLocal {
     public boolean InsertarAmortizacion(int pre_id, double capital, double interes, double valor_cuota, String fecha, String estado, int numero, double saldo);
     
     public List<String> cargarListaPrestamos();
+    
+    public double encontrarInteres(String tiPre);
 }

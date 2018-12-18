@@ -10,66 +10,58 @@
         <ui:composition template="./../Templates/plantillaPaginas.xhtml">
             <ui:define name="content">
                 <h:form>
-                        <p:tab id="prestamo" title="Configuración">
-                            <p:panel id="nuevoPrestamo" header="Configuración Nuevo Préstamo">
-                                <p:panelGrid  class="ui-noborder" columns="2">                           
-                                    <p:outputLabel for="tipoPrestamo" value="Tipo de Préstamo: " />
-                                    <p:inputText id='tipoPrestamo' required="true" value="#{nuevoProductoBean.tipo}" />
+                    <p:tab id="prestamo" title="Nuevo Producto">
+                        <p:panel id="nuevoPrestamo" header="Configuración Nuevo Préstamo">
+                            <p:panelGrid  id="nuevo" class="ui-noborder" columns="2">                           
+                                <p:outputLabel for="tipoPrestamo" value="Tipo de Préstamo:" />
+                                <p:inputText id='tipoPrestamo' required="true" value="#{nuevoProductoBean.tipo}" />
 
-                                    <p:outputLabel for="descripcionPrestamo" value="Descripción del Préstamo: " />
-                                    <p:inputText id='descripcionPrestamo' value="#{nuevoProductoBean.descripcion}" />
+                                <p:outputLabel for="descripcionPrestamo" value="Descripción del Préstamo:" />
+                                <p:inputText id='descripcionPrestamo' value="#{nuevoProductoBean.descripcion}" />
 
-                                    <p:outputLabel for="estadoPrestamo" value="Estado: " />
-                                    <p:selectOneMenu id="estadoPrestamo" value="#{nuevoProductoBean.estado}" style="width:125px">
-                                        <f:selectItem itemLabel="Activo" itemValue="Activo" />
-                                        <f:selectItem itemLabel="Inactivo" itemValue="Inactivo" />
-                                    </p:selectOneMenu>
+                                <p:outputLabel for="estadoPrestamo" value="Estado:" />
+                                <p:selectOneMenu id="estadoPrestamo" value="#{nuevoProductoBean.estado}" style="width:125px">
+                                    <f:selectItem itemLabel="Activo" itemValue="Activo" />
+                                    <f:selectItem itemLabel="Inactivo" itemValue="Inactivo" />
+                                </p:selectOneMenu>
 
-                                    <p:outputLabel for="montoMinimo" value="Monto Mínimo: " />
-                                    <p:inputNumber id='montoMinimo' required="true" value="#{nuevoProductoBean.montoMin}" />
+                                <p:outputLabel for="montoMinimo" value="Monto Mínimo:" />
+                                <p:inputNumber id='montoMinimo' required="true" value="#{nuevoProductoBean.montoMin}" />
 
-                                    <p:outputLabel for="montoMaximo" value="Monto Máximo: " />
-                                    <p:inputNumber id='montoMaximo' required="true" value="#{nuevoProductoBean.montoMax}" />
+                                <p:outputLabel for="montoMaximo" value="Monto Máximo:" />
+                                <p:inputNumber id='montoMaximo' required="true" value="#{nuevoProductoBean.montoMax}" />
 
-                                    <p:outputLabel for="fechaCreacion" value="Fecha de Creación: " />
-                                    <p:calendar id='fechaCreacion' value="#{now}" pattern="dd/MM/yy" />
+                                <p:outputLabel for="tipoCliente" value="Tipo de Cliente:" />
+                                <p:selectOneMenu id="tipoCliente" value="#{nuevoProductoBean.tipoCliente}" style="width:125px">
+                                    <f:selectItem itemLabel="Natural" itemValue="Natural" />
+                                    <f:selectItem itemLabel="Juridico" itemValue="Juridico" />
+                                </p:selectOneMenu>
 
-                                    <p:outputLabel for="tasaInteres" value="Tasa de interés: " />
-                                    <p:inputText id='tasaInteres' value="#{nuevoProductoBean.interes}">
-                                        <f:convertNumber integerOnly="true" type="number" />
-                                    </p:inputText>
+                                <p:outputLabel for="tasaInteres" value="Tasa de interés anual:" />
+                                <p:inputNumber id='tasaInteres' value="#{nuevoProductoBean.interes}"/>
 
-                                    <p:outputLabel for="plazoMin" value="Plazo mínimo de pago: " />
-                                    <p:inputText id='plazoMin' required="true" value="#{nuevoProductoBean.plazoMin}">
-                                        <f:convertNumber integerOnly="true" type="number" />
-                                    </p:inputText>
+                                <p:outputLabel for="plazoMin"  value="Plazo mínimo de pago:" />
+                                <p:inputText id="plazoMin" required="true" value="#{nuevoProductoBean.plazoMin}" maxlength="3">
+                                    <f:convertNumber integerOnly="true" type="number" />
+                                </p:inputText>
 
-                                    <p:outputLabel for="plazoMax" value="Plazo máximo de pago: " />
-                                    <p:inputText id='plazoMax' required="true" value="#{nuevoProductoBean.plazoMax}" >
-                                        <f:convertNumber integerOnly="true" type="number" />
-                                    </p:inputText>
-                                </p:panelGrid>
-                                <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoProductoBean.guardarProducto()}" update="@form" >
-                                    <p:confirm header="Confirmación" message="Desea guardar el producto?" icon="pi pi-exclamation-triangle" />
-                                </p:commandButton>
-                                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
-                                    <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"  action="#{nuevoProductoBean.guardarProducto()}" />
-                                    <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
-                                </p:confirmDialog>
-                            </p:panel>
-                        </p:tab>
-                        
-                        <p:tab id="actualizar" title="Actualización Datos">
-                            <p:panel id="actualizarPrestamo" header="Actualización Datos de Préstamo">
-                                <p:panelGrid  class="ui-noborder" columns="2">
-                                    <p:outputLabel for="tipoPrestamo" value="Tipo de Préstamo: " />
-                                    <p:selectOneMenu>
-                                        <f:selectItems value="#{tipoProductoBean.cmb1}"/>
-                                    </p:selectOneMenu>
-                                </p:panelGrid>
-                            </p:panel>
-                        </p:tab>
-                </h:form>
+                                <p:outputLabel for="plazoMax" value="Plazo máximo de pago:" />
+                                <p:inputText id="plazoMax" required="true" value="#{nuevoProductoBean.plazoMax}" maxlength="3">
+                                    <f:convertNumber integerOnly="true" type="number" />
+                                </p:inputText>
+                            </p:panelGrid>
+                            <p:commandButton id="aceptar" value="Aceptar" action="#{nuevoProductoBean.guardarProducto()}" update="@form" >
+                                <p:confirm header="Confirmación" message="Desea guardar el producto?" icon="pi pi-exclamation-triangle" />
+                            </p:commandButton>
+                            <p:confirmDialog id="conf1" global="true" showEffect="fade" hideEffect="fade">
+                                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="pi pi-check"  action="#{nuevoProductoBean.guardarProducto()}" />
+                                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="pi pi-times" />
+                            </p:confirmDialog>
+                            
+                        </p:panel>
+                    </p:tab>
+
+</h:form>
             </ui:define>
         </ui:composition>
     </body>
