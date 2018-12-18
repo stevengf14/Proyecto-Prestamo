@@ -30,7 +30,9 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(ec.edu.espe.arquitectura.prestamo.api.ComisionResource.class);
+        resources.add(ec.edu.espe.arquitectura.prestamo.api.TipoProductoResource.class);
         resources.add(ec.edu.espe.arquitectura.prestamo.api.UsuarioResource.class);
+        resources.add(ec.edu.espe.arquitectura.prestamo.api.VerPrestamoResource.class);
     }
     
 }
