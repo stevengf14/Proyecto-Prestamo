@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//ES" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <ui:composition template="./../Templates/plantillaPaginas.xhtml">
+        <ui:define name="content">
+            <h:form>
+                <p:panel id="mainPnl" header="Pagos" style="width: 80%; margin: auto;">
+                    <p:panel id="buscPnl" header="Busqueda" >
+                        <p:panelGrid columns="3" styleClass="ui-noborder">
+                            <p:outputLabel for="filtroCmb" value="Búsqueda por Cédula:" />
+                            <p:inputText id="filtroCmb" value="#{accrualBean.cedula}"/>
+                            
+                            <p:commandButton id="buscarCmd" value="Buscar" actionListener="#{accrualBean.cargarTabla()}" update="@form" />
+                            <p:outputLabel for="nombre" value="Nombre:" />
+                            <h:outputText id="nombre" value="#{accrualBean.nombre}"  />
+                           
+                        </p:panelGrid>
+
+                    </p:panel>
+
+                    
+                        <p:panel id="Amortización" header="Detalle Accrual">
+                            <p:dataTable id="tabAmortizacion" var="amort" value="#{accrualBean.lista}" rowKey="#{amort.amo_id}">
+                              
+                                <p:column headerText="ID AMORTIZACION">
+                                    <h:outputText value="#{amort.amo_id}" />
+                                </p:column>
+                                
+                                <p:column headerText="Fecha cargo">
+                                    <h:outputText value="#{amort.fecha}" />
+                                </p:column>
+
+                                <p:column headerText="Fecha de Vencimiento">
+                                    <h:outputText value="#{amort.fechaPago}" />
+                                </p:column>
+                                
+                                <p:column headerText="Valor cuota">
+                                    <h:outputText value="#{amort.valorCuota}" />
+                                </p:column>
+                                
+                                <p:column headerText="Valor interes">
+                                    <h:outputText value="#{amort.valor}" />
+                                </p:column>
+
+                             </p:dataTable>   
+                        </p:panel>       
+                        
+                    <p:messages globalOnly="true" showDetail="true" severity="warn" />
+                </p:panel>
+            </h:form>
+        </ui:define>
+    </ui:composition>
+</html>

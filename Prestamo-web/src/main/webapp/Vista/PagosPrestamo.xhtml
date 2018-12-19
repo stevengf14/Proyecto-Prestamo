@@ -14,61 +14,60 @@
                         <p:panelGrid columns="3" styleClass="ui-noborder">
                             <p:outputLabel for="filtroCmb" value="Búsqueda por Cédula:" />
                             <p:inputText id="filtroCmb" value="#{pagosBean.cedula}"/>
-                            
+
                             <p:commandButton id="buscarCmd" value="Buscar" actionListener="#{pagosBean.cargarTabla()}" update="@form" />
                             <p:outputLabel for="nombre" value="Nombre:" />
                             <h:outputText id="nombre" value="#{pagosBean.nombre}"  />
-                           
+
                         </p:panelGrid>
 
                     </p:panel>
 
-                    
-                        <p:panel id="Amortización" header="Tabla de Amortización">
-                            <p:dataTable id="tabAmortizacion" var="amort" value="#{pagosBean.amortbusqueda}"
-                                         rowKey="#{amort.id}">
-                              
-                                <p:column headerText="No. Cuota">
-                                    <h:outputText value="#{amort.numero}" />
-                                </p:column>
-                                
-                                <p:column headerText="Estado">
-                                    <h:outputText value="#{amort.estado}" />
-                                </p:column>
 
-                                <p:column headerText="Fecha de Vencimiento">
-                                    <h:outputText value="#{amort.fechaAmortizacion}" />
-                                </p:column>
+                    <p:panel id="Amortización" header="Tabla de Amortización">
+                        <p:dataTable id="tabAmortizacion" var="amort" value="#{pagosBean.amortbusqueda}">
 
-                                <p:column headerText="Capital">
-                                    <h:outputText value="#{amort.capital}" />
-                                </p:column>
+                            <p:column headerText="No. Cuota" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.numero}" />
+                            </p:column>
 
-                                <p:column headerText="Interés">
-                                    <h:outputText value="#{amort.interes}" />
-                                </p:column>
+                            <p:column headerText="Estado" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.estado}" />
+                            </p:column>
 
-                                <p:column headerText="Valor Cuota">
-                                    <h:outputText value="#{amort.valorCuota}" />
-                                </p:column>
-                             </p:dataTable>   
-                        </p:panel>       
-                        <p:panel id="recibirPago" header="Recibir Pago:">
-                            <p:panelGrid columns="4" styleClass="ui-noborder" style=" margin: 0 auto;">
-                                <p:outputLabel for="numCuota" value="Numero Cuota:" />
-                                <h:outputText id="numCuota" value="#{pagosBean.taSelected.numero}"  />
-                                <p:outputLabel for="valCuota" value="Valor Cuota:" />
-                                <h:outputText id="valCuota" value="#{pagosBean.taSelected.valorCuota}"  />
-                                <p:outputLabel for="cargos" value="Cargos:" />
-                                <h:outputText id="cargos" value="#{pagosBean.cargo}"  />
-                                <p:outputLabel for="total" value="Total a Pagar: " />
-                                <h:outputText id="total" value="#{pagosBean.total}"  />
-                                 <p:outputLabel for="valRecibido" value="Valor Recibido:" />
-                                 <p:inputText id="valRecibido" value="#{pagosBean.valorRecibido}"  />
+                            <p:column headerText="Fecha de Vencimiento" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.fechaAmortizacion}" />
+                            </p:column>
 
-                                 <p:commandButton id="regPago" value="Registrar Pago" actionListener="#{pagosBean.regisPago()}" ajax="false"   />
-                            </p:panelGrid>
-                        </p:panel>
+                            <p:column headerText="Capital" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.capital}" />
+                            </p:column>
+
+                            <p:column headerText="Interés" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.interes}" />
+                            </p:column>
+
+                            <p:column headerText="Valor Cuota" sortBy="#{amort.numero}">
+                                <h:outputText value="#{amort.valorCuota}" />
+                            </p:column>
+                        </p:dataTable>   
+                    </p:panel>       
+                    <p:panel id="recibirPago" header="Recibir Pago:">
+                        <p:panelGrid columns="4" styleClass="ui-noborder" style=" margin: 0 auto;">
+                            <p:outputLabel for="numCuota" value="Numero Cuota:" />
+                            <h:outputText id="numCuota" value="#{pagosBean.taSelected.numero}"  />
+                            <p:outputLabel for="valCuota" value="Valor Cuota:" />
+                            <h:outputText id="valCuota" value="#{pagosBean.taSelected.valorCuota}"  />
+                            <p:outputLabel for="cargos" value="Cargos:" />
+                            <h:outputText id="cargos" value="#{pagosBean.cargo}"  />
+                            <p:outputLabel for="total" value="Total a Pagar: " />
+                            <h:outputText id="total" value="#{pagosBean.total}"  />
+                            <p:outputLabel for="valRecibido" value="Valor Recibido:" />
+                            <p:inputText id="valRecibido" value="#{pagosBean.valorRecibido}"  />
+
+                            <p:commandButton id="regPago" value="Registrar Pago" actionListener="#{pagosBean.regisPago()}" ajax="false"   />
+                        </p:panelGrid>
+                    </p:panel>
                     <p:messages globalOnly="true" showDetail="true" severity="warn" />
                 </p:panel>
             </h:form>

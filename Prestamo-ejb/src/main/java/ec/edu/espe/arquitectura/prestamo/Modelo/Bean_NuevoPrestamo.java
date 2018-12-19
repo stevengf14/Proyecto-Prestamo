@@ -289,7 +289,7 @@ public class Bean_NuevoPrestamo implements Bean_NuevoPrestamoLocal {
         boolean val = false;
         try {
             em1.joinTransaction();
-            Query q = em1.createNativeQuery("INSERT INTO AMORTIZACION VALUES(" + id + "," + pre_id + "," + capital + "," + interes + "," + valor_cuota + ",'" + fecha + "','" + estado + "'," + numero + "," + saldo + ")");
+            Query q = em1.createNativeQuery("INSERT INTO AMORTIZACION VALUES(" + id + "," + pre_id + "," + capital + "," + interes + "," + valor_cuota + ",'" + fecha + "','" + estado + "'," + numero + "," + valor_cuota + ")");
             int num = q.executeUpdate();
             if (num < 0) {
                 val = true;

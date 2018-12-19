@@ -20,7 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -104,8 +103,8 @@ public class Prestamo implements Serializable {
     @JoinColumn(name = "PRO_ID", referencedColumnName = "PRO_ID")
     @ManyToOne(optional = false)
     private Producto proId;
-    @OneToOne(cascade = CascadeType.ALL, mappedBy = "prestamo")
-    private Accrual accrual;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "preId")
+    private List<Accrual> accrualList;
     @OneToMany(mappedBy = "preId")
     private List<Cargo> cargoList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "preId")
@@ -234,12 +233,13 @@ public class Prestamo implements Serializable {
         this.proId = proId;
     }
 
-    public Accrual getAccrual() {
-        return accrual;
+    @XmlTransient
+    public List<Accrual> getAccrualList() {
+        return accrualList;
     }
 
-    public void setAccrual(Accrual accrual) {
-        this.accrual = accrual;
+    public void setAccrualList(List<Accrual> accrualList) {
+        this.accrualList = accrualList;
     }
 
     @XmlTransient

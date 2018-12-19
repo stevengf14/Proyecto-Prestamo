@@ -8,15 +8,18 @@ package ec.edu.espe.arquitectura.prestamo.Entidades;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -31,7 +34,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Accrual.findAll", query = "SELECT a FROM Accrual a")
     , @NamedQuery(name = "Accrual.findById", query = "SELECT a FROM Accrual a WHERE a.id = :id")
-    , @NamedQuery(name = "Accrual.findByPreId", query = "SELECT a FROM Accrual a WHERE a.preId = :preId")
     , @NamedQuery(name = "Accrual.findByAmoId", query = "SELECT a FROM Accrual a WHERE a.amoId = :amoId")
     , @NamedQuery(name = "Accrual.findByFecha", query = "SELECT a FROM Accrual a WHERE a.fecha = :fecha")
     , @NamedQuery(name = "Accrual.findByValor", query = "SELECT a FROM Accrual a WHERE a.valor = :valor")
@@ -47,26 +49,25 @@ public class Accrual implements Serializable {
     private BigDecimal id;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "PRE_ID")
-    private BigInteger preId;
     @Column(name = "AMO_ID")
     private BigInteger amoId;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
     @Column(name = "FECHA")
-    private String fecha;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 200)
     @Column(name = "VALOR")
-    private String valor;
-    @Size(max = 30)
+    private BigDecimal valor;
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 30)
     @Column(name = "ESTADO")
     private String estado;
-    @JoinColumn(name = "ID", referencedColumnName = "ID", insertable = false, updatable = false)
-    @OneToOne(optional = false)
-    private Prestamo prestamo;
+    @JoinColumn(name = "PRE_ID", referencedColumnName = "ID")
+    @ManyToOne(optional = false)
+    private Prestamo preId;
 
     public Accrual() {
     }
@@ -75,11 +76,12 @@ public class Accrual implements Serializable {
         this.id = id;
     }
 
-    public Accrual(BigDecimal id, BigInteger preId, String fecha, String valor) {
+    public Accrual(BigDecimal id, BigInteger amoId, Date fecha, BigDecimal valor, String estado) {
         this.id = id;
-        this.preId = preId;
+        this.amoId = amoId;
         this.fecha = fecha;
         this.valor = valor;
+        this.estado = estado;
     }
 
     public BigDecimal getId() {
@@ -90,14 +92,6 @@ public class Accrual implements Serializable {
         this.id = id;
     }
 
-    public BigInteger getPreId() {
-        return preId;
-    }
-
-    public void setPreId(BigInteger preId) {
-        this.preId = preId;
-    }
-
     public BigInteger getAmoId() {
         return amoId;
     }
@@ -106,19 +100,19 @@ public class Accrual implements Serializable {
         this.amoId = amoId;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
-    public String getValor() {
+    public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(String valor) {
+    public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
 
@@ -130,12 +124,12 @@ public class Accrual implements Serializable {
         this.estado = estado;
     }
 
-    public Prestamo getPrestamo() {
-        return prestamo;
+    public Prestamo getPreId() {
+        return preId;
     }
 
-    public void setPrestamo(Prestamo prestamo) {
-        this.prestamo = prestamo;
+    public void setPreId(Prestamo preId) {
+        this.preId = preId;
     }
 
     @Override
