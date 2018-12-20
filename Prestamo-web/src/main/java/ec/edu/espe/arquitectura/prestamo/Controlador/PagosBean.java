@@ -44,7 +44,7 @@ public class PagosBean implements Serializable {
     private int plazo;
     private ArrayList<Total> lista_total = new ArrayList<>();
     private String nombre = "";
-    private double valorCuota;
+    private static double valorCuota;
     private double xCobrar;
     private double valorRecibido;
     private double cambio;
@@ -285,6 +285,7 @@ public class PagosBean implements Serializable {
                 this.taSelected = amort;
                 // this.idAmortizacion=taSelected.getId().intValue();
                 System.out.println("hi------: " + taSelected.getId().intValue());
+                PagosBean.valorCuota= taSelected.getSaldo().doubleValue();
                 PagosBean.idAmortizacion = taSelected.getId().intValue();
                 if (this.taSelected.getEstado().equals("Mora")) {
                     PagosBean.cargo = 6.38;
@@ -315,8 +316,10 @@ public class PagosBean implements Serializable {
         if (inserto == true) {
             FacesUtil.addMessageInfo("Se registro el pago correctamente");
         }
-
-        bean_pagos.updateTabla(this.idAmortizacion + "");
+        double saldo = this.getValorCuota()-this.valorRecibido;
+        System.out.println(saldo);
+        System.out.println(this.getValorCuota());
+        bean_pagos.updateTabla(this.idAmortizacion + "", saldo);
         actualizarLimpiar();
 
     }

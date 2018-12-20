@@ -50,6 +50,9 @@
                             <p:column headerText="Valor Cuota" sortBy="#{amort.numero}">
                                 <h:outputText value="#{amort.valorCuota}" />
                             </p:column>
+                             <p:column headerText="Saldo" sortBy="#{amort.numero}">
+                                 <h:outputText value="#{amort.saldo}" />
+                            </p:column>
                         </p:dataTable>   
                     </p:panel>       
                     <p:panel id="recibirPago" header="Recibir Pago:">

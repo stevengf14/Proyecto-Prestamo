@@ -30,7 +30,8 @@ public interface PagoPrestamoFacadeLocal {
  public List<Amortizacion> busquedaAmortizacion(String cedula);
   public boolean insertarPago(String id, String amo_id, String fechaPago, String valorCargos, String valortToal, String valorPagado);
 public int ExtraerNumPagoPrestamo();
- public void updateTabla(String id);
+ 
  public void updateTablaPrestamo(String id);
+  public void updateTabla(String id, double saldo);
     
 }

@@ -338,13 +338,19 @@ public class PagoPrestamoFacade implements PagoPrestamoFacadeLocal {
         return num;
     }
 
-    public void updateTabla(String id) {
+    public void updateTabla(String id, double saldo) {
         EntityManagerFactory factory = Persistence.createEntityManagerFactory("ec.edu.espe.arquitectura_Prestamo-ejb_ejb_1PU");
         EntityManager em1 = factory.createEntityManager();
         try {
             em1.joinTransaction();
-            Query q = em1.createNativeQuery("UPDATE AMORTIZACION SET ESTADO='Pagado' WHERE ID=" + id);
-            q.executeUpdate();
+            if(saldo<=0){
+                Query q = em1.createNativeQuery("UPDATE AMORTIZACION SET ESTADO='Pagado', SALDO="+ 0+ " WHERE ID=" + id);
+                q.executeUpdate();
+            }else{
+                Query q = em1.createNativeQuery("UPDATE AMORTIZACION SET ESTADO='Pendiente', SALDO="+ saldo+ " WHERE ID=" + id);
+                q.executeUpdate();
+            }
+            
         } catch (Exception ex) {
         }
         em1.close();
@@ -363,4 +369,6 @@ public class PagoPrestamoFacade implements PagoPrestamoFacadeLocal {
         em1.close();
         factory.close();
     }
+
+    
 }
